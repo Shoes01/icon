@@ -1,24 +1,28 @@
 import sys
+import logging
+import log_config
+from game import Game
 
-introduction: str =\
+log_config.configure_logging()
+log: logging.Logger = log_config.get_logger(__name__)
+log.info("Begin script.")
+
+print(
 """
-Welcome to $game.
-Press N for new game.
-Press Q to quit.
+Welcome to 
+
+  _____ _____ ____  _   _          __    _____  ______      ________ _____  _   _ __  __ ______ _   _ _______ 
+ |_   _/ ____/ __ \| \ | |        / _|  / ____|/ __ \ \    / /  ____|  __ \| \ | |  \/  |  ____| \ | |__   __|
+   | || |   | |  | |  \| |   ___ | |_  | |  __| |  | \ \  / /| |__  | |__) |  \| | \  / | |__  |  \| |  | |   
+   | || |   | |  | | . ` |  / _ \|  _| | | |_ | |  | |\ \/ / |  __| |  _  /| . ` | |\/| |  __| | . ` |  | |   
+  _| || |___| |__| | |\  | | (_) | |   | |__| | |__| | \  /  | |____| | \ \| |\  | |  | | |____| |\  |  | |   
+ |_____\_____\____/|_| \_|  \___/|_|    \_____|\____/   \/   |______|_|  \_\_| \_|_|  |_|______|_| \_|  |_|   
+
 """
+)
 
-print(introduction)
 
-while True:
-    choice: str = input(">>> ")
-    if choice == "N":
-        print("Starting new game...")
-        print("<code the rest of the game...>")
-    elif choice == "Q":
-        print("Quitting...")
-        sys.exit()
-    else:
-        print("Invalid choice.")
-        print(introduction)
+game = Game()
+game.run()
 
-        
+print("\nGoodbye.\n")
