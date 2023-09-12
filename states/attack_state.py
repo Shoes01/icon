@@ -1,5 +1,7 @@
 from constants import NUMBER_OPTIONS
 from typing import List
+import combat
+from unit import Unit
 
 class AttackState:
     def __init__(self, mediator):
@@ -22,6 +24,9 @@ q. Nevermind.
     def handle_input(self, user_input):
         if user_input.isdigit() and int(user_input) < len(self.unit_list):
             print(f"You are attacking with {self.unit_list[int(user_input)].name.title()}")
+            generic_defender = Unit("generic")
+            combat.do_combat(self.unit_list[int(user_input)], generic_defender)
+            
     
 
     def update(self):

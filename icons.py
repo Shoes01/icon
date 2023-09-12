@@ -1,5 +1,5 @@
 class Icon:
-    def __init__(self, type):
+    def __init__(self, type="generic"):
         match type.lower():
             case "attack":
                 self.name = "Attack Icon"
@@ -7,6 +7,6 @@ class Icon:
             case "defend":
                 self.name = "Defend Icon"
                 self.symbol = "D"
-            case _:
+            case "generic":
                 self.name = "Generic Icon"
                 self.symbol = "G"
