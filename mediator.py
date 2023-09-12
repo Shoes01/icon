@@ -18,3 +18,6 @@ class Mediator:
     
     def previous_state(self):
         self.game.previous_state()
+    
+    def end_turn(self):
+        self.game.end_turn()

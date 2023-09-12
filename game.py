@@ -9,6 +9,7 @@ class Game:
         self.state_stack = [self.mediator.main_menu_state,]
         self.current_state = self.state_stack[-1]
         self.player = Player()
+        self.turn_count = 0
 
     def change_state(self, new_state):
         self.state_stack.append(new_state)
@@ -24,7 +25,7 @@ class Game:
     def run(self):
         while self.running:
             self.current_state.render()
-            user_input = input("> ").lower()
+            user_input = input(f"[TURN:{self.turn_count}]> ").lower()
             self.handle_input(user_input)
             self.current_state.handle_input(user_input)
             self.current_state.update()
@@ -37,3 +38,6 @@ class Game:
 
     def quit(self):
         self.running = False
+    
+    def end_turn(self):
+        self.turn_count += 1
