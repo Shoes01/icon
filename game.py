@@ -1,4 +1,5 @@
 from mediator import Mediator
+from player import Player
 
 
 class Game:
@@ -7,6 +8,7 @@ class Game:
         self.running = True
         self.state_stack = [self.mediator.main_menu_state,]
         self.current_state = self.state_stack[-1]
+        self.player = Player()
 
     def change_state(self, new_state):
         self.state_stack.append(new_state)
@@ -22,14 +24,16 @@ class Game:
     def run(self):
         while self.running:
             self.current_state.render()
-            user_input = input("> ")
+            user_input = input("> ").lower()
             self.handle_input(user_input)
             self.current_state.handle_input(user_input)
             self.current_state.update()
     
     def handle_input(self, user_input):
-        if user_input == "Q":
+        if user_input == "q":
             self.previous_state()
+        elif user_input == "x":
+            self.quit()
 
     def quit(self):
         self.running = False
