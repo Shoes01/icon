@@ -1,33 +1,30 @@
 from constants import NUMBER_OPTIONS
 from typing import List
-import combat
 from unit import Unit
 
-class AttackState:
+class AttackState_2:
     def __init__(self, mediator):
         self.mediator = mediator
-        self.unit_list: List = []
+        self.unit_list: List[Unit] = []
         self.menu_list: str = ""
+        self.chosen_task = self.mediator.attack_state_1.chosen_task
 
     def render(self):
         print(
 f"""
-ATTACK STATE
+ATTACK STATE 2/2
 
-Who will you attack with?
+Which task are you undertaking?
 
-{self.menu_list}
+{self.unit_list}
+
 q. Nevermind.
 """
         )
 
     def handle_input(self, user_input):
         if user_input.isdigit() and int(user_input) < len(self.unit_list):
-            print(f"You are attacking with {self.unit_list[int(user_input)].name.title()}")
-            generic_defender = Unit("generic")
-            combat.do_combat(self.unit_list[int(user_input)], generic_defender)
-            
-    
+            print(f"You are performing task {self.task_list[int(user_input).name.title()]}. Now choose a unit.")        
 
     def update(self):
         # Prepare the list of options from the menu.

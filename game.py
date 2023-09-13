@@ -1,6 +1,9 @@
 from mediator import Mediator
 from player import Player
 
+from typing import List
+from tasks import Task, task_factory
+
 
 class Game:
     def __init__(self):
@@ -10,6 +13,7 @@ class Game:
         self.current_state = self.state_stack[-1]
         self.player = Player()
         self.turn_count = 0
+        self.task_stack: List[Task] = []
 
     def change_state(self, new_state):
         self.state_stack.append(new_state)
@@ -28,6 +32,7 @@ class Game:
             user_input = input(f"[TURN:{self.turn_count}]> ").lower()
             self.handle_input(user_input)
             self.current_state.handle_input(user_input)
+            self.update()
             self.current_state.update()
     
     def handle_input(self, user_input):
@@ -35,6 +40,13 @@ class Game:
             self.previous_state()
         elif user_input == "x":
             self.quit()
+        user_input = "" # consume the user input so the states can't use it.
+
+
+    def update(self):
+        if self.turn_count == 1:
+            self.task_stack.append(task_factory("test"))
+
 
     def quit(self):
         self.running = False
