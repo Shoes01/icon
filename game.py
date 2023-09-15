@@ -27,14 +27,17 @@ class Game:
 
         self.add_team(team_factory("sigint"))
 
+
     def push_state(self, state: BaseState):
         self.state_stack.append(state)
     
+
     def pop_state(self):
         if len(self.state_stack) == 1:
             self.quit()
         else:
             self.state_stack.pop()
+
 
     def run(self):
         while self.running:
@@ -52,21 +55,25 @@ class Game:
             
             self.update_tasks()
 
+
     def handle_input(self, user_input):
         match user_input:
             case "x": 
                 self.quit()
             case "b":
                 self.pop_state()
-        user_input = ""
+        user_input = "" # Consume input.
+
 
     def end_turn(self):
         print(f"Turn {self.turn_count} complete.\n")
         self.turn_count += 1
 
+
     def quit(self):
         self.running = False
     
+
     def update(self, update: Dict[str, Any]):
         for key, value in update.items():
             match key:
@@ -87,8 +94,10 @@ class Game:
                     print(value)
                     self.pop_state()
 
+
     def add_team(self, team: Team):
         self.teams[team.category].append(team)
+
 
     def update_tasks(self):
         if self.turn_count == 1:

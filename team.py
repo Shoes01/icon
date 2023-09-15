@@ -3,6 +3,7 @@ class Team:
         self.name = name
         self.category = category
 
+
 def team_factory(team: str) -> Team:
     match team:
         case "sigint":

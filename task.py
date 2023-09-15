@@ -8,6 +8,7 @@ class Task:
 
         self.is_complete = False
 
+
 def task_factory(task: str) -> Task:
     match task:
         case "sigint_1":
