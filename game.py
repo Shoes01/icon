@@ -42,13 +42,14 @@ class Game:
     def run(self):
         while self.running:
             self.state_stack[-1].render()
+            
             if len(self.state_stack) > 1:
-                print_regular_text("b. Back")
+                print_regular_text("b. Back\n")
 
             print_text_input(f"[TURN {self.turn_count:3d}]> ")
             user_input: str = input().lower()
             print("\n")
-            self.handle_input(user_input)
+            user_input = self.handle_input(user_input)
             if user_input != "":
                 user_input = self.state_stack[-1].sanitize_input(user_input)
                 if user_input != -1:
@@ -58,13 +59,15 @@ class Game:
             self.update_tasks()
 
 
-    def handle_input(self, user_input):
+    def handle_input(self, user_input) -> str:
         match user_input:
             case "x": 
                 self.quit()
+                user_input = ""
             case "b":
                 self.pop_state()
-        user_input = "" # Consume input.
+                user_input = ""
+        return user_input
 
 
     def end_turn(self):

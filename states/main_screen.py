@@ -16,7 +16,7 @@ class MainScreen(BaseState):
         text = ""
         for i, option in enumerate(self.menu_options):
             text += f"{i+1}. {option}\n"
-        text += "0. End Turn"
+        text += "\n0. End Turn"
         print_regular_text(text)
 
 

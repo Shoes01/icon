@@ -1,4 +1,6 @@
-from colorama import Fore, Style, Back
+from colorama import Fore, Style, Back, init
+
+init()
 
 
 def print_color(text: str, fore: str="normal", back: str="normal", style: str="normal", end: str="\n"):

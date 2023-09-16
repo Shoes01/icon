@@ -27,7 +27,7 @@ class SigintScreen(BaseState):
                 return
             print_regular_text("Tasks:")
             for i, option in enumerate(self.menu_options):
-                print_regular_text(f"{i+1}. {option.name}")
+                print_regular_text(f"  {i+1}. {option.name}")
         # Pick a team.
         if self.on_menu == "two":
             print_important_text("Which team do you want to assign to this task?")
@@ -36,7 +36,7 @@ class SigintScreen(BaseState):
                 print_VIP_text("There are no teams.")
                 return
             for i, team in enumerate(self.teams):
-                print_regular_text(f"{i+1}. {team.name}")
+                print_regular_text(f"  {i+1}. {team.name}")
 
 
     def handle_input(self, user_input: int) -> Dict[str, Any]:
