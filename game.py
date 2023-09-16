@@ -7,7 +7,7 @@ from states.sigint_screen import SigintScreen
 from task import Task, task_factory
 from team import Team, team_factory
 from combat import do_combat
-
+from print_color import print_regular_text, print_text_input, print_important_text
 
 class Game:
     def __init__(self):
@@ -42,9 +42,11 @@ class Game:
     def run(self):
         while self.running:
             self.state_stack[-1].render()
-            if len(self.state_stack) > 1: print(f"b. Back.\n")
+            if len(self.state_stack) > 1:
+                print_regular_text("b. Back")
 
-            user_input: str = input(f"[TURN {self.turn_count:3d}]> ").lower()
+            print_text_input(f"[TURN {self.turn_count:3d}]> ")
+            user_input: str = input().lower()
             print("\n")
             self.handle_input(user_input)
             if user_input != "":
@@ -66,7 +68,7 @@ class Game:
 
 
     def end_turn(self):
-        print(f"Turn {self.turn_count} complete.\n")
+        print_important_text(f"Turn {self.turn_count} complete.\n")
         self.turn_count += 1
 
 
@@ -91,7 +93,7 @@ class Game:
                     result = do_combat(team, task)
                     self.update(result)
                 case "combat":
-                    print("Combat complete.\n")
+                    print_important_text("Combat complete.\n")
                     self.pop_state()
 
 

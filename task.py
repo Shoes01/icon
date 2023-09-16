@@ -30,7 +30,7 @@ def task_factory(task: str) -> Task:
         case "sigint_1":
             return Task(
                 name="SIGINT Task", 
-                description="This is a SIGNALS INTELLIGENCE task.", 
+                description="SIGINT is initiating analysis: Scouring the airwaves for alien signals...", 
                 category="sigint",
                 icons=[icon_factory("analysis"), icon_factory("analysis"), icon_factory("observation")]
             )

@@ -1,3 +1,6 @@
+# MVP-02
+Improve the narrative of "combat".
+
 # MVP-01
 Need to add icons to Task and Team
 Need to use icons in combat - start simple: if all icons match, win. Else, lose.

@@ -1,5 +1,7 @@
 from typing import List, Dict, Any
 
+from print_color import print_text_error, print_regular_text, print_important_text
+
 
 class BaseState:
     def __init__(self, menu_title: str, menu_options: List[str]):
@@ -7,25 +9,27 @@ class BaseState:
         self.menu_options = menu_options
 
 
-    def render(self):
-        print(self.menu_title)
+    def render(self) -> None:
+        print_important_text(self.menu_title)
+        text = ""
         for i, option in enumerate(self.menu_options):
-            print(f"{i+1}. {option}")
+            text += f"{i+1}. {option}\n"
+        print_regular_text(text)
     
 
     def handle_input(self, user_input: int) -> Dict[str, Any]:
-        print("DEBUG: BaseState.handle_input() called")
+        print_text_error("DEBUG: BaseState.handle_input() called")
         return {"nothing": False}
     
     
     def sanitize_input(self, user_input: str) -> int:
         try:
             user_input = int(user_input)
-            if user_input < 1 or user_input > len(self.menu_options):
-                print("Invalid choice. Please enter a number between 1 and ", len(self.menu_options))
+            if user_input < 0 or user_input > len(self.menu_options):
+                print_text_error("Invalid choice. Please enter a number between 1 and ", len(self.menu_options))
                 return -1
             else:
                 return user_input
         except ValueError:
-            print("Invalid input. Please enter a number.")
+            print_text_error("Invalid input. Please enter a number.")
             return -1
