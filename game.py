@@ -91,7 +91,7 @@ class Game:
                     result = do_combat(team, task)
                     self.update(result)
                 case "combat":
-                    print(value)
+                    print("Combat complete.\n")
                     self.pop_state()
 
 

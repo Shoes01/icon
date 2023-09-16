@@ -1,7 +1,13 @@
+from typing import List
+
+from icon import Icon, icon_factory
+
+
 class Team:
-    def __init__(self, name, category):
+    def __init__(self, name: str, category: str, icons: List[Icon]):
         self.name = name
         self.category = category
+        self.icons = icons
 
 
 def team_factory(team: str) -> Team:
@@ -9,12 +15,18 @@ def team_factory(team: str) -> Team:
         case "sigint":
             return Team(
                 name="SIGINT Team", 
-                category="sigint")
+                category="sigint",
+                icons=[icon_factory("analysis")]
+                )
         case "satcom":
             return Team(
                 name="SATCOM Team", 
-                category="satcom")
+                category="satcom",
+                icons=[icon_factory("communication"), icon_factory("jamming")]
+                )
         case "xcom":
             return Team(
                 name="XCOM Team", 
-                category="xcom")
+                category="xcom",
+                icons=[icon_factory("attack"), icon_factory("defend")]
+                )
