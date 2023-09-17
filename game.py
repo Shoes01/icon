@@ -43,7 +43,7 @@ class Game:
 
     def run(self):
         while self.running:
-            os.system('cls' if os.name == 'nt' else 'clear')
+            #os.system('cls' if os.name == 'nt' else 'clear')
             self.state_stack[-1].render()
             
             if len(self.state_stack) > 1:
@@ -52,6 +52,7 @@ class Game:
             print_text_input(f"[TURN {self.turn_count:3d}]> ")
             user_input: str = input().lower()
             print("\n")
+
             user_input = self.handle_input(user_input)
             if user_input != "":
                 user_input = self.state_stack[-1].sanitize_input(user_input)
@@ -100,7 +101,10 @@ class Game:
                     result = do_combat(team, task)
                     self.update(result)
                 case "combat":
-                    print_important_text("Combat complete.\n")
+                    current_task: Task = value
+                    for task in self.tasks[current_task.category]:
+                        if task.name == current_task.name:
+                            task.is_complete = current_task.is_complete
                     self.pop_state()
 
 
@@ -112,8 +116,19 @@ class Game:
         self.tasks[task.category].append(task)
 
 
-    def update_tasks(self):
+    def remove_task(self, task: Task):
+        self.tasks[task.category].remove(task)
+
+
+    def update_tasks(self, task: Task = None):
         if self.turn_count == 1:
             self.add_task(task_factory("sigint_1"))
             self.alerts["sigint"] += 1
+        for tasks in self.tasks.values():
+            for task in tasks:
+                if task.name == "SIGINT Task" and task.is_complete:
+                    self.add_task(task_factory("sigint_2"))
+                if task.is_complete:
+                    self.remove_task(task)
+
             

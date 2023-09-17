@@ -2,7 +2,7 @@ from typing import Dict, List
 
 from base_state import BaseState
 from task import Task
-from print_color import print_regular_text, print_important_text, print_new_text
+from print_color import print_regular_text, print_important_text, print_good_text
 
 
 title = "Welcome, commander."
@@ -23,11 +23,11 @@ class MainScreen(BaseState):
         for alert_number in self.alerts.values():
             if alert_number > 0:
                 new_alerts += 1
-        print_new_text("1 alert." if new_alerts == 1 else f"{new_alerts} alerts.")
+        print_good_text("1 alert." if new_alerts == 1 else f"{new_alerts} alerts.")
         want_whitespace = True
         for alert in self.alerts.items():
             if alert[1] > 0: 
-                print_new_text(f"  New {alert[0].upper()} tasks: {alert[1]}.")
+                print_good_text(f"  New {alert[0].upper()} tasks: {alert[1]}.")
                 want_whitespace = False
         if want_whitespace: print()
         
