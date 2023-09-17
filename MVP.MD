@@ -11,6 +11,9 @@ The team is put on cooldown for as many turns as they have mismatched icons
 
 Each step would have to give its own reward... 
 
+## Detour
+Attempting tasks should only happen at the end of a turn. 
+
 # MVP-01
 Need to add icons to Task and Team
 Need to use icons in combat - start simple: if all icons match, win. Else, lose.

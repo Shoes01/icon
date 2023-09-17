@@ -14,22 +14,25 @@ class MainScreen(BaseState):
         super().__init__(menu_title=title, menu_options=options)
         self.alerts = alerts
         self.tasks = tasks
+        self.alters_are_read = False
 
 
     def render(self):
         print_important_text(self.menu_title)
         
-        new_alerts = 0
-        for alert_number in self.alerts.values():
-            if alert_number > 0:
-                new_alerts += 1
-        print_good_text("1 alert." if new_alerts == 1 else f"{new_alerts} alerts.")
-        want_whitespace = True
-        for alert in self.alerts.items():
-            if alert[1] > 0: 
-                print_good_text(f"  New {alert[0].upper()} tasks: {alert[1]}.")
-                want_whitespace = False
-        if want_whitespace: print()
+        if self.alters_are_read is False:
+            new_alerts = 0
+            for alert_number in self.alerts.values():
+                if alert_number > 0:
+                    new_alerts += 1
+            print_good_text("1 alert." if new_alerts == 1 else f"{new_alerts} alerts.")
+            want_whitespace = True
+            for alert in self.alerts.items():
+                if alert[1] > 0: 
+                    print_good_text(f"  New {alert[0].upper()} tasks: {alert[1]}.")
+                    want_whitespace = False
+            if want_whitespace: print()
+            self.alters_are_read = True
         
         text = ""
         for i, option in enumerate(self.menu_options):
@@ -49,4 +52,5 @@ class MainScreen(BaseState):
             case 3:
                 return {"xcom": True}
             case 0:
+                self.alters_are_read = False
                 return {"end_turn": True}

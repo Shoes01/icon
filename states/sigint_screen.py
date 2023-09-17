@@ -27,7 +27,8 @@ class SigintScreen(BaseState):
                 return
             print_regular_text("Tasks:")
             for i, option in enumerate(self.menu_options):
-                print_regular_text(f"  {i+1}. {option.name}")
+                if option.is_being_attempted is False:
+                    print_regular_text(f"  {i+1}. {option.name}")
         # Pick a team.
         if self.on_menu == "two":
             print_important_text("Which team do you want to assign to this task?")

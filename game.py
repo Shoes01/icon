@@ -75,9 +75,9 @@ class Game:
     def end_turn(self):
         print_important_text(f"Turn {self.turn_count} complete.\n")
         self.turn_count += 1
-        self.update_tasks()
         for key in self.alerts:
             self.alerts[key] = 0
+        self.update_tasks()
 
 
     def quit(self):
@@ -114,6 +114,7 @@ class Game:
 
     def add_task(self, task: Task):
         self.tasks[task.category].append(task)
+        self.alerts[task.category] += 1
 
 
     def remove_task(self, task: Task):
@@ -123,7 +124,6 @@ class Game:
     def update_tasks(self, task: Task = None):
         if self.turn_count == 1:
             self.add_task(task_factory("sigint_1"))
-            self.alerts["sigint"] += 1
         for tasks in self.tasks.values():
             for task in tasks:
                 if task.name == "SIGINT Task" and task.is_complete:

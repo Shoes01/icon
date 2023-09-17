@@ -12,6 +12,7 @@ class Task:
         self.losecon = losecon
 
         self.is_complete = False
+        self.is_being_attempted = False
 
 
 def task_factory(task: str) -> Task:
