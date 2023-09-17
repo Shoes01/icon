@@ -52,3 +52,7 @@ def print_regular_text(text: str, end: str="\n"):
 
 def print_VIP_text(text: str, end: str="\n"):
     print_color(text, fore="black", back="green", style="bright", end=end)
+
+
+def print_new_text(text: str, end: str="\n"):
+    print_color(text, fore="cyan", style="bright", end=end)

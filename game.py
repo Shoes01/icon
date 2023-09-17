@@ -1,4 +1,5 @@
 from typing import List, Dict, Any
+import os
 
 from base_state import BaseState
 from states.root_menu import RootMenu
@@ -26,6 +27,7 @@ class Game:
         }
 
         self.add_team(team_factory("sigint"))
+        self.alerts: Dict[str, int] = {"sigint": 0, "satcom": 0, "xcom": 0}
 
 
     def push_state(self, state: BaseState):
@@ -41,6 +43,7 @@ class Game:
 
     def run(self):
         while self.running:
+            os.system('cls' if os.name == 'nt' else 'clear')
             self.state_stack[-1].render()
             
             if len(self.state_stack) > 1:
@@ -55,8 +58,6 @@ class Game:
                 if user_input != -1:
                     result = self.state_stack[-1].handle_input(user_input)
                     self.update(result)
-            
-            self.update_tasks()
 
 
     def handle_input(self, user_input) -> str:
@@ -73,6 +74,9 @@ class Game:
     def end_turn(self):
         print_important_text(f"Turn {self.turn_count} complete.\n")
         self.turn_count += 1
+        self.update_tasks()
+        for key in self.alerts:
+            self.alerts[key] = 0
 
 
     def quit(self):
@@ -83,7 +87,7 @@ class Game:
         for key, value in update.items():
             match key:
                 case "new_game":
-                    self.state_stack.append(MainScreen())
+                    self.state_stack.append(MainScreen(self.alerts, self.tasks))
                 case "quit":
                     self.quit()
                 case "end_turn":
@@ -102,9 +106,14 @@ class Game:
 
     def add_team(self, team: Team):
         self.teams[team.category].append(team)
+    
+
+    def add_task(self, task: Task):
+        self.tasks[task.category].append(task)
 
 
     def update_tasks(self):
         if self.turn_count == 1:
-            self.tasks["sigint"] = [task_factory("sigint_1"),]
+            self.add_task(task_factory("sigint_1"))
+            self.alerts["sigint"] += 1
             
