@@ -12,10 +12,13 @@ The team is put on cooldown for as many turns as they have mismatched icons
 Each step would have to give its own reward... 
 
 ## Detour
-Attempting tasks should only happen at the end of a turn.
-
-TODO: need to come up with a system to move tasks around from a "available list" to a "todo list" to a "completed list"
-...and eventually a way to cancel tasks that are on the todo list.
+Show the player how many tasks are in what state for each dept.
+example
+```
+1. SIGINT
+    > 2 tasks available.
+    > 1 task in progress.
+```
 
 # MVP-01
 Need to add icons to Task and Team

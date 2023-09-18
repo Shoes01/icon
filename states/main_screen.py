@@ -20,6 +20,7 @@ class MainScreen(BaseState):
     def render(self):
         print_important_text(self.menu_title)
         
+        # Print alerts, if any.
         if self.alters_are_read is False:
             new_alerts = 0
             for alert_number in self.alerts.values():
@@ -34,15 +35,24 @@ class MainScreen(BaseState):
             if want_whitespace: print()
             self.alters_are_read = True
         
+        # Print departments and their tasks.
+        # TODO: be more clear about tasks that are which state.
         text = ""
         for i, option in enumerate(self.menu_options):
             text += f"{i+1}. {option.upper():<8}"
             # Add the number of tasks for each option
-            task_count = 0
+            tasks_available = 0
+            tasks_in_progress = 0
             for task in self.tasks:
-                if task.category == option and task.state == TaskState.AVAILABLE:
-                    task_count += 1
-            text += f"[ {task_count:>1} task.  ]\n" if task_count == 1 else f"[ {task_count:>1} tasks. ]\n"
+                if task.category == option:
+                    match task.state:
+                        case TaskState.AVAILABLE:
+                            tasks_available += 1
+                        case TaskState.IN_PROGRESS:
+                            tasks_in_progress += 1
+            s1 = "" if tasks_available == 1 else "s"
+            s2 = "" if tasks_in_progress == 1 else "s"
+            text += f"\n  > {tasks_available} task{s1} available, {tasks_in_progress} task{s2} in progress.\n"
         text += "\n0. End Turn"
         print_regular_text(text)
 
