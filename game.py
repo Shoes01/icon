@@ -36,7 +36,7 @@ class Game:
 
     def run(self):
         while self.running:
-            #os.system('cls' if os.name == 'nt' else 'clear')
+            os.system('cls' if os.name == 'nt' else 'clear')
             self.state_stack[-1].render()
             
             if len(self.state_stack) > 1:
