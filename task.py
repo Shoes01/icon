@@ -1,6 +1,15 @@
 from typing import List
+from enum import Enum
 
 from icon import Icon, icon_factory
+
+
+class TaskState(Enum):
+    AVAILABLE = 1
+    IN_PROGRESS = 2
+    SUCCESSFUL = 3
+    UNSUCCESSFUL = 4
+
 
 class Task:
     def __init__(self, name: str, description: str, category: str, icons: List[Icon], wincon: int, losecon: int):
@@ -11,8 +20,7 @@ class Task:
         self.wincon = wincon
         self.losecon = losecon
 
-        self.is_complete = False
-        self.is_being_attempted = False
+        self.state = TaskState.AVAILABLE
 
 
 def task_factory(task: str) -> Task:

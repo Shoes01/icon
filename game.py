@@ -5,7 +5,7 @@ from base_state import BaseState
 from states.root_menu import RootMenu
 from states.main_screen import MainScreen
 from states.sigint_screen import SigintScreen
-from task import Task, task_factory
+from task import Task, task_factory, TaskState
 from team import Team, team_factory
 from combat import do_combat
 from print_color import print_regular_text, print_text_input, print_important_text
@@ -15,19 +15,12 @@ class Game:
         self.running = True
         self.state_stack: List[BaseState] = [RootMenu(),]
         self.turn_count = 0
-        self.tasks: Dict[str, List[Task]] = {
-            "sigint": [],
-            "satcom": [],
-            "xcom": [],
-        }
-        self.teams: Dict[str, List[Team]] = {
-            "sigint": [],
-            "satcom": [],
-            "xcom": [],
-        }
+        self.tasks: List[Task] = []
+        self.teams: List[Team] = []
 
         self.add_team(team_factory("sigint"))
         self.alerts: Dict[str, int] = {"sigint": 0, "satcom": 0, "xcom": 0}
+        self.task_queue: List[tuple[Task, Team]] = []
 
 
     def push_state(self, state: BaseState):
@@ -73,6 +66,9 @@ class Game:
 
 
     def end_turn(self):
+        while len(self.task_queue):
+            task, team = self.task_queue.pop()
+            do_combat(team, task)
         print_important_text(f"Turn {self.turn_count} complete.\n")
         self.turn_count += 1
         for key in self.alerts:
@@ -94,41 +90,69 @@ class Game:
                 case "end_turn":
                     self.end_turn()
                 case "sigint":
-                    self.state_stack.append(SigintScreen(tasks=self.tasks["sigint"], teams=self.teams["sigint"]))
+                    sigint_tasks = self.get_tasks("sigint")
+                    sigint_teams = self.get_teams("sigint")
+                    self.state_stack.append(SigintScreen(tasks=sigint_tasks, teams=sigint_teams))
                 case "task":
                     task: Task = value[0]
                     team: Team = value[1]
-                    result = do_combat(team, task)
-                    self.update(result)
+                    task.state = TaskState.IN_PROGRESS
+                    self.task_queue.append((task, team))
+                    # remove this task from the task list
+                    self.pop_state()
                 case "combat":
                     current_task: Task = value
-                    for task in self.tasks[current_task.category]:
+                    for task in self.tasks:
                         if task.name == current_task.name:
-                            task.is_complete = current_task.is_complete
-                    self.pop_state()
-
-
+                            # If I have two tasks with the same name, then some random one will be marked complete. Is this a problem?
+                            task.state = current_task.state
+                            break
+    
+    
     def add_team(self, team: Team):
-        self.teams[team.category].append(team)
+        self.teams.append(team)
     
 
+    def get_teams(self, category: str) -> List[Team]:
+        results: List[Team] = []
+        for team in self.teams:
+            if team.category == category:
+                results.append(team)
+        return results
+
+
     def add_task(self, task: Task):
-        self.tasks[task.category].append(task)
+        self.tasks.append(task)
         self.alerts[task.category] += 1
 
 
     def remove_task(self, task: Task):
-        self.tasks[task.category].remove(task)
+        self.tasks.remove(task)
 
 
-    def update_tasks(self, task: Task = None):
+    def get_tasks(self, category: str) -> List[Task]:
+        results: List[Task] = []
+        for task in self.tasks:
+            if task.category == category:
+                results.append(task)
+        return results
+
+
+    def update_tasks(self):
         if self.turn_count == 1:
             self.add_task(task_factory("sigint_1"))
-        for tasks in self.tasks.values():
-            for task in tasks:
-                if task.name == "SIGINT Task" and task.is_complete:
-                    self.add_task(task_factory("sigint_2"))
-                if task.is_complete:
+        
+        for task in self.tasks:
+            if task.name == "SIGINT Task" and task.state == TaskState.SUCCESSFUL:
+                self.add_task(task_factory("sigint_2"))
+            
+            match task.state:
+                case TaskState.SUCCESSFUL:
                     self.remove_task(task)
+                case TaskState.UNSUCCESSFUL:
+                    task.state = TaskState.AVAILABLE
+                case TaskState.IN_PROGRESS:
+                    print(f"Why is this task still in progress? {task.name}")
+            
 
             

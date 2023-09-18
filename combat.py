@@ -2,7 +2,7 @@ from colorama import init, Fore, Style
 import random
 from typing import Dict, Any, List
 
-from task import Task
+from task import Task, TaskState
 from team import Team
 from print_color import print_regular_text, print_text_input, print_good_text, print_bad_text
 
@@ -11,13 +11,13 @@ def do_combat(team: Team, task: Task) -> Dict[str, Any]:
     team_icon_names: List[str] = [icon.name for icon in team.icons]
     task_icon_pattern: List[str] = [random.choice(task.icons) for _ in range(20)]
 
-    victory = False
-
     print_regular_text(f"{team.name.title()} has the following icons: {team_icon_names}.")
     print_regular_text(f"{task.name.title()} has the following pattern: {[icon.name for icon in task.icons]}.")
     print_regular_text("\n" + task.description + "\n")
+    
     wins = 0
     losses = 0
+    success = False
     for icon in task_icon_pattern:
         if icon.name in team_icon_names:
             wins += 1
@@ -29,14 +29,17 @@ def do_combat(team: Team, task: Task) -> Dict[str, Any]:
         
         if wins >= task.wincon:
             print_good_text("\nCombat won!\n")
-            victory = True
+            success = True
             break
         elif losses >= task.losecon:
             print_bad_text("\nCombat lost!\n")
-            victory = False
+            success = False
             break
     
-    task.is_complete = victory
+    if success:
+        task.state = TaskState.SUCCESSFUL
+    else:
+        task.state = TaskState.UNSUCCESSFUL
     
     print_text_input("\nPress any key to conclude combat.\n")
     input()

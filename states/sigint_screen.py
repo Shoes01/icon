@@ -1,7 +1,7 @@
 from typing import List, Dict, Any
 
 from base_state import BaseState
-from task import Task
+from task import Task, TaskState
 from team import Team
 from print_color import print_regular_text, print_important_text, print_VIP_text
 
@@ -27,7 +27,7 @@ class SigintScreen(BaseState):
                 return
             print_regular_text("Tasks:")
             for i, option in enumerate(self.menu_options):
-                if option.is_being_attempted is False:
+                if not option.state == TaskState.IN_PROGRESS:
                     print_regular_text(f"  {i+1}. {option.name}")
         # Pick a team.
         if self.on_menu == "two":

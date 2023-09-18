@@ -1,7 +1,7 @@
 from typing import Dict, List
 
 from base_state import BaseState
-from task import Task
+from task import Task, TaskState
 from print_color import print_regular_text, print_important_text, print_good_text
 
 
@@ -10,7 +10,7 @@ options = ["sigint", "satcom", "xcom"]
 
 
 class MainScreen(BaseState):
-    def __init__(self, alerts: Dict[str, int], tasks: Dict[str, List[Task]]):
+    def __init__(self, alerts: Dict[str, int], tasks: List[Task]):
         super().__init__(menu_title=title, menu_options=options)
         self.alerts = alerts
         self.tasks = tasks
@@ -38,7 +38,11 @@ class MainScreen(BaseState):
         for i, option in enumerate(self.menu_options):
             text += f"{i+1}. {option.upper():<8}"
             # Add the number of tasks for each option
-            text += f"[ {len(self.tasks[option]):>1} task.  ]\n" if len(self.tasks[option]) == 1 else f"[ {len(self.tasks[option]):>1} tasks. ]\n"
+            task_count = 0
+            for task in self.tasks:
+                if task.category == option and task.state == TaskState.AVAILABLE:
+                    task_count += 1
+            text += f"[ {task_count:>1} task.  ]\n" if task_count == 1 else f"[ {task_count:>1} tasks. ]\n"
         text += "\n0. End Turn"
         print_regular_text(text)
 
