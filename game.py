@@ -6,7 +6,7 @@ from states.root_menu import RootMenu
 from states.main_screen import MainScreen
 from states.sigint_screen import SigintScreen
 from task import Task, task_factory, TaskState
-from team import Team, team_factory
+from team import Team, team_factory, TeamState
 from combat import do_combat
 from print_color import print_regular_text, print_text_input, print_important_text
 
@@ -69,6 +69,12 @@ class Game:
         while len(self.task_queue):
             task, team = self.task_queue.pop()
             do_combat(team, task)
+        for team in self.teams:
+            if team.cooldown > 0:
+                team.cooldown -= 1
+            if team.cooldown == 0:
+                team.state = TeamState.AVAILABLE
+            
         print_important_text(f"Turn {self.turn_count} complete.\n")
         self.turn_count += 1
         for key in self.alerts:
@@ -84,7 +90,7 @@ class Game:
         for key, value in update.items():
             match key:
                 case "new_game":
-                    self.state_stack.append(MainScreen(self.alerts, self.tasks))
+                    self.state_stack.append(MainScreen(self.alerts, self.tasks, self.teams))
                 case "quit":
                     self.quit()
                 case "end_turn":
@@ -97,15 +103,22 @@ class Game:
                     task: Task = value[0]
                     team: Team = value[1]
                     task.state = TaskState.IN_PROGRESS
+                    team.state = TeamState.WORKING
                     self.task_queue.append((task, team))
-                    # remove this task from the task list
                     self.pop_state()
                 case "combat":
-                    current_task: Task = value
+                    current_task: Task = value[0]
+                    current_team: Team = value[1]
                     for task in self.tasks:
                         if task.name == current_task.name:
                             # If I have two tasks with the same name, then some random one will be marked complete. Is this a problem?
                             task.state = current_task.state
+                            break
+                    for team in self.teams:
+                        if team.name == current_team.name:
+                            # If I have two tasks with the same name, then some random one will be marked complete. Is this a problem?
+                            team.state = current_team.state
+                            team.cooldown = current_team.cooldown
                             break
     
     

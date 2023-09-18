@@ -1,6 +1,13 @@
 from typing import List
+from enum import Enum
 
 from icon import Icon, icon_factory
+
+
+class TeamState(Enum):
+    AVAILABLE = 1
+    WORKING = 2
+    COOLDOWN = 3
 
 
 class Team:
@@ -8,6 +15,9 @@ class Team:
         self.name = name
         self.category = category
         self.icons = icons
+
+        self.state = TeamState.AVAILABLE
+        self.cooldown = 0
 
 
 def team_factory(team: str) -> Team:

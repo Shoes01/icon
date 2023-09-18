@@ -1,3 +1,7 @@
+# MVP-XX -- Task Icon Discoverability
+Eventually, I want the player to attempt tasks to see what sort of Icons they require.
+(This could done via RECON - a dummy team who simply runs the icons, fails them all, and gets put on cooldown)
+
 # MVP-02
 Improve the narrative of "combat".
 
@@ -12,13 +16,9 @@ The team is put on cooldown for as many turns as they have mismatched icons
 Each step would have to give its own reward... 
 
 ## Detour
-Show the player how many tasks are in what state for each dept.
-example
-```
-1. SIGINT
-    > 2 tasks available.
-    > 1 task in progress.
-```
+On SIGINT screen, show teams in detail, including cooldowns. 
+Also show tasks...  do I need columns???
+
 
 # MVP-01
 Need to add icons to Task and Team

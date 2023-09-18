@@ -3,7 +3,7 @@ import random
 from typing import Dict, Any, List
 
 from task import Task, TaskState
-from team import Team
+from team import Team, TeamState
 from print_color import print_regular_text, print_text_input, print_good_text, print_bad_text, print_important_text
 
 
@@ -46,10 +46,13 @@ def do_combat(team: Team, task: Task) -> Dict[str, Any]:
     else:
         task.state = TaskState.UNSUCCESSFUL
     
+    team.state = TeamState.COOLDOWN
+    team.cooldown = losses
+
     print_text_input("\nPress any key to conclude combat.\n")
     input()
 
-    return {"combat": task}
+    return {"combat": (team, task)}
 
 
 def do_combat_SIGINT_fromAI(team: Team, task: Task) -> Dict[str, Any]:

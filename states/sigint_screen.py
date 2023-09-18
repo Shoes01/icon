@@ -12,6 +12,7 @@ title = "Welcome to SIGNALS INTELLIGENCE"
 class SigintScreen(BaseState):
     def __init__(self, tasks: List[Task], teams: List[Team]):
         super().__init__(menu_title=title, menu_options=tasks)
+        self.tasks: List[Task] = tasks
         self.teams: List[Team] = teams
         self.chosen_task: Task = None
         self.chosen_team: Team = None
@@ -19,6 +20,11 @@ class SigintScreen(BaseState):
     
 
     def render(self):
+        # Display team info and task info. 
+        # Then, display the task picker.
+        ## Ideally, in columns, and each numbered. Can be the same numbers...
+        ## And when a task is picked, highlight it, but continue to display them all.
+        ## Pressing back here should just return to the "one" menu...
         # Pick a task.
         if self.on_menu == "one":
             print_important_text(self.menu_title)

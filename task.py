@@ -60,6 +60,7 @@ def task_factory(task: str) -> Task:
                 "Extraterrestrial signal detection and analysis successful.", # The victory bark.
                 ],
                 fail_barks=[
+                    "No unusual patterns detected... recalibrating...",
                     "Task interrupted: Unusual signal interference detected, disrupting initial scans.",
                     "Sweeps thwarted: Irregularities persist, obscuring further observations.",
                     "Optimization hindered: Faint anomalies proving elusive, signal remains enigmatic.",
