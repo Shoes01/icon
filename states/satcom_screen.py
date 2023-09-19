@@ -11,7 +11,7 @@ title = "Welcome to SATELLITE COMMAND"
 
 class SatcomScreen(BaseState):
     def __init__(self, tasks: List[Task], teams: List[Team]):
-        super().__init__(menu_title=title, menu_options=teams)
+        super().__init__(menu_title=title, menu_options=teams, name="SatcomScreen")
         self.tasks: List[Task] = tasks
         self.teams: List[Team] = teams
         self.chosen_task: Task = None

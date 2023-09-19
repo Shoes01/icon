@@ -15,7 +15,7 @@ menu_title =\
 
 class RootMenu(BaseState):
     def __init__(self):
-        super().__init__(menu_title=menu_title, menu_options=["New Game", "Quit"])
+        super().__init__(menu_title=menu_title, menu_options=["New Game", "Quit"], name="RootMenu")
     
 
     def render(self) -> None:

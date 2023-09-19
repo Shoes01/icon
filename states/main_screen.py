@@ -12,7 +12,7 @@ options = ["sigint", "satcom", "xcom"]
 
 class MainScreen(BaseState):
     def __init__(self, alerts: Dict[str, int], tasks: List[Task], teams: List[Team]):
-        super().__init__(menu_title=title, menu_options=options)
+        super().__init__(menu_title=title, menu_options=options, name="MainScreen")
         self.alerts = alerts
         self.tasks = tasks
         self.teams = teams

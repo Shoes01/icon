@@ -1,0 +1,1 @@
+[ ] When pressing an invalid key, the error is cleared because game.py's run() clears the terminal every loop.

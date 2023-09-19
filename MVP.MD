@@ -80,8 +80,6 @@ Task wincons and losecons are also hidden until discovered.
 Eventually, I want the player to attempt tasks to see what sort of Icons they require.
 (This could done via RECON - a dummy team who simply runs the icons, fails them all, and gets put on cooldown)
 
-# MVP-XX - Live Terminal
-Print the combat text out gradually, for juice
 
 # MVP-05 -- Icon Information
 Display icon information for Tasks and Teams.
@@ -96,6 +94,9 @@ Ending the turn executes all QUEUED tasks.
 Need to support a task creating new tasks.
 I almost already have this done. But I want to formalize it inside the task, not in the code. 
     And as a list.
+
+# [COMPLETE] MVP-03 - Live Terminal
+Print the combat text out gradually, for juice
 
 # [COMPLETE] MVP-02
 Improve the narrative of "combat".

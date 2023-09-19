@@ -4,9 +4,10 @@ from print_color import print_text_error, print_regular_text, print_important_te
 
 
 class BaseState:
-    def __init__(self, menu_title: str, menu_options: List[str]):
+    def __init__(self, menu_title: str, menu_options: List[str], name: str = "BaseState"):
         self.menu_title = menu_title
         self.menu_options = menu_options
+        self.name = name
 
 
     def render(self) -> None:

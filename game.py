@@ -41,8 +41,10 @@ class Game:
             os.system('cls' if os.name == 'nt' else 'clear')
             self.state_stack[-1].render()
             
-            if len(self.state_stack) > 1:
+            if self.state_stack[-1].name != "MainScreen" and self.state_stack[-1].name != "RootMenu":
                 print_regular_text("b. Back\n")
+            else:
+                print()
 
             print_text_input(f"[TURN {self.turn_count:3d}]> ")
             user_input: str = input().lower()
@@ -62,6 +64,11 @@ class Game:
                 self.quit()
                 user_input = ""
             case "b":
+                if self.state_stack[-1].name == "RootMenu":
+                    self.quit()
+                    return user_input
+                elif self.state_stack[-1].name == "MainScreen":
+                    return user_input
                 self.pop_state()
                 for team in self.teams:
                     if team.state == TeamState.CHOSEN:
