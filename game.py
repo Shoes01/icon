@@ -4,6 +4,7 @@ import os
 from base_state import BaseState
 from states.root_menu import RootMenu
 from states.main_screen import MainScreen
+from states.satcom_screen import SatcomScreen
 from states.sigint_screen import SigintScreen
 from task import Task, task_factory, TaskState
 from team import Team, team_factory, TeamState
@@ -19,6 +20,7 @@ class Game:
         self.teams: List[Team] = []
 
         self.add_team(team_factory("sigint"))
+        self.add_team(team_factory("satcom"))
         self.alerts: Dict[str, int] = {"sigint": 0, "satcom": 0, "xcom": 0}
         self.task_queue: List[tuple[Task, Team]] = []
 
@@ -98,10 +100,14 @@ class Game:
                     self.quit()
                 case "end_turn":
                     self.end_turn()
+                case "satcom":
+                    tasks = self.get_tasks("satcom")
+                    teams = self.get_teams("satcom")
+                    self.state_stack.append(SatcomScreen(tasks=tasks, teams=teams))                    
                 case "sigint":
-                    sigint_tasks = self.get_tasks("sigint")
-                    sigint_teams = self.get_teams("sigint")
-                    self.state_stack.append(SigintScreen(tasks=sigint_tasks, teams=sigint_teams))
+                    tasks = self.get_tasks("sigint")
+                    teams = self.get_teams("sigint")
+                    self.state_stack.append(SigintScreen(tasks=tasks, teams=teams))
                 case "task":
                     task: Task = value[0]
                     team: Team = value[1]
@@ -157,9 +163,10 @@ class Game:
     def update_tasks(self):
         if self.turn_count == 1:
             self.add_task(task_factory("sigint_1"))
+            self.add_task(task_factory("satcom_1"))
         
         for task in self.tasks:
-            if task.name == "SIGINT Task" and task.state == TaskState.SUCCESSFUL:
+            if task.state == TaskState.SUCCESSFUL:
                 self.add_task(task_factory("sigint_2"))
             
             match task.state:
