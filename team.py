@@ -8,6 +8,7 @@ class TeamState(Enum):
     AVAILABLE = 1
     WORKING = 2
     COOLDOWN = 3
+    CHOSEN = 4
 
 
 class Team:

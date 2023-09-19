@@ -61,6 +61,9 @@ class Game:
                 user_input = ""
             case "b":
                 self.pop_state()
+                for team in self.teams:
+                    if team.state == TeamState.CHOSEN:
+                        team.state = TeamState.AVAILABLE
                 user_input = ""
         return user_input
 

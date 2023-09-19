@@ -47,7 +47,7 @@ def do_combat(team: Team, task: Task) -> Dict[str, Any]:
         task.state = TaskState.UNSUCCESSFUL
     
     team.state = TeamState.COOLDOWN
-    team.cooldown = losses
+    team.cooldown = losses + 1
 
     print_text_input("\nPress any key to conclude combat.\n")
     input()

@@ -9,6 +9,7 @@ class TaskState(Enum):
     IN_PROGRESS = 2
     SUCCESSFUL = 3
     UNSUCCESSFUL = 4
+    CHOSEN = 5
 
 
 class Task:
