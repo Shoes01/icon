@@ -1,5 +1,8 @@
 from colorama import Fore, Style, Back, init
 from typing import List
+import time
+import msvcrt
+
 
 from task import Task, TaskState
 from team import Team, TeamState
@@ -8,7 +11,7 @@ from team import Team, TeamState
 init()
 
 
-def print_color(text: str, fore: str="normal", back: str="normal", style: str="normal", end: str="\n"):
+def print_color(text: str, fore: str="normal", back: str="normal", style: str="normal", end: str="\n", slow_print=False):
     output: str = ""
     
     match fore:
@@ -36,35 +39,51 @@ def print_color(text: str, fore: str="normal", back: str="normal", style: str="n
             output += f"{Style.DIM}"
     
     output += f"{text}{end}{Style.RESET_ALL}"
-    print(output, end="")
+    if slow_print:
+        skip_print = False
+        for char in output:
+            if msvcrt.kbhit():
+                skip_print = True
+            print(char, end="", flush=True)
+            if not skip_print: time.sleep(0.005)
+    else:
+        print(output, end="")
 
 
-def print_text_input(text: str, end: str=""):
-    print_color(text, fore="black", back="green", style="bright", end=end)
+def print_text_input(text: str, end: str="", slow_print=False):
+    print_color(text, fore="black", back="green", style="bright", end=end, slow_print=slow_print)
 
 
-def print_text_error(text: str, end: str="\n"):
-    print_color(text, fore="red", end=end)
+def print_text_error(text: str, end: str="\n", slow_print=False):
+    print_color(text, fore="red", end=end, slow_print=slow_print)
 
 
-def print_important_text(text: str, end: str="\n"):
-    print_color(text, fore="green", style="bright", end=end)
+def print_important_text(text: str, end: str="\n", slow_print=False):
+    print_color(text, fore="green", style="bright", end=end, slow_print=slow_print)
 
 
-def print_regular_text(text: str, end: str="\n"):
-    print_color(text, fore="green", end=end)
+def print_regular_text(text: str, end: str="\n", slow_print=False):
+    print_color(text, fore="green", end=end, slow_print=slow_print)
 
 
-def print_VIP_text(text: str, end: str="\n"):
-    print_color(text, fore="black", back="green", style="bright", end=end)
+def print_VIP_text(text: str, end: str="\n", slow_print=False):
+    print_color(text, fore="black", back="green", style="bright", end=end, slow_print=slow_print)
 
 
-def print_good_text(text: str, end: str="\n"):
-    print_color(text, fore="cyan", style="bright", end=end)
+def print_good_text(text: str, end: str="\n", slow_print=False):
+    print_color(text, fore="cyan", style="bright", end=end, slow_print=slow_print)
 
 
-def print_bad_text(text: str, end: str="\n"):
-    print_color(text, fore="red", style="bright", end=end)
+def print_bad_text(text: str, end: str="\n", slow_print=False):
+    print_color(text, fore="red", style="bright", end=end, slow_print=slow_print)
+
+
+def print_good_combat_text(text:str, end: str="\n", slow_print=False):
+    print_color(text, fore="cyan", end=end, slow_print=slow_print)
+
+
+def print_bad_combat_text(text:str, end: str="\n", slow_print=False):
+    print_color(text, fore="black", end=end, slow_print=slow_print)
 
 
 def print_two_columns(col_teams: List[Task], col_tasks: List[Team], col_width: int=60):

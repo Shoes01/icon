@@ -1,10 +1,11 @@
 from colorama import init, Fore, Style
 import random
 from typing import Dict, Any, List
+import os
 
 from task import Task, TaskState
 from team import Team, TeamState
-from print_color import print_regular_text, print_text_input, print_good_text, print_bad_text, print_important_text
+from print_color import print_regular_text, print_text_input, print_good_text, print_bad_text, print_important_text, print_good_combat_text, print_bad_combat_text
 
 
 def do_combat(team: Team, task: Task) -> Dict[str, Any]:
@@ -14,30 +15,34 @@ def do_combat(team: Team, task: Task) -> Dict[str, Any]:
     #print_regular_text(f"{team.name.title()} has the following icons: {team_icon_names}.")
     #print_regular_text(f"{task.name.title()} has the following pattern: {[icon.name for icon in task.icons]}.")
 
-    print_important_text(f"{task.name.upper()}.")
-    print_regular_text("\n" + task.description + "\n")
+    # Prepare the terminal for combat!
+    os.system('cls' if os.name == 'nt' else 'clear')
+    terminal_size = os.get_terminal_size()
+    num_lines = max(12, terminal_size.lines - 2)
+    print(f"\033[{num_lines}A", end="")
+
+    print_important_text(f"{task.name.upper()}.", slow_print=True)
+    print_regular_text("\n" + task.description + "\n", slow_print=True)
     
     wins = 0
     losses = 0
     success = False
     for icon in task_icon_pattern:
         if icon.name in team_icon_names:
-            
-            #print(f"[+] : {random.choice(icon.bark_win)}")
-            #print(f"{Fore.GREEN}[+]{Style.RESET_ALL} : {random.choice(icon.bark_win)}")
-            print(f"{Fore.GREEN}[+]{Style.RESET_ALL} : {task.barks[wins]}")
+            print_important_text("[+]", end="", slow_print=True)
+            print_good_combat_text(f" : {task.barks[wins]}", slow_print=True)
             wins += 1
         else:
-            print(f"{Fore.RED}{Style.BRIGHT}[-]{Style.RESET_ALL} : {Fore.BLACK}{task.fail_barks[wins]}{Style.RESET_ALL}")
+            print_bad_text("[-]", end="", slow_print=True)
+            print_bad_combat_text(f" : {task.fail_barks[wins]}", slow_print=True)
             losses += 1
-            #print(f"{Fore.RED}{Style.BRIGHT}[-]{Style.RESET_ALL} : {Fore.BLACK}{random.choice(icon.bark_lose)}{Style.RESET_ALL}")
         
         if wins >= task.wincon:
-            print_good_text(f"\n{task.barks[-1]}\n")
+            print_good_text(f"\n{task.barks[-1]}\n", slow_print=True)
             success = True
             break
         elif losses >= task.losecon:
-            print_bad_text(f"\n{task.fail_barks[-1]}\n")
+            print_bad_text(f"\n{task.fail_barks[-1]}\n", slow_print=True)
             success = False
             break
     

@@ -1,3 +1,7 @@
+# MVP-XX -- "Real Time"
+The game is real time, in the same way OG Xcom was real time. 
+Tasks take X hours, and "ending the turn" either skips a day, or skips to the next finished task, or something.
+
 # MVP-XX -- Equipment
 Some icons are granted by training, some are granted by equipment
 To create a new team, the player needs the required equipment.
@@ -75,6 +79,18 @@ Task wincons and losecons are also hidden until discovered.
 
 Eventually, I want the player to attempt tasks to see what sort of Icons they require.
 (This could done via RECON - a dummy team who simply runs the icons, fails them all, and gets put on cooldown)
+
+# MVP-XX - Live Terminal
+Print the combat text out gradually, for juice
+
+# MVP-05 -- Icon Information
+Display icon information for Tasks and Teams.
+    These will be discoverable...
+
+# MVP-04 -- Task Queue and Execution
+Change workflow so that tasks are QUEUED. 
+The user may return the task state to AVAILABLE through some other menu?
+Ending the turn executes all QUEUED tasks.
 
 # MVP-03 -- Task Engine
 Need to support a task creating new tasks.
