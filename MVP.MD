@@ -34,6 +34,7 @@ And after an amount of time, the task expires.
     This could also generate new tasks. 
 
 # MVP-XX -- Multi-Team Tasks and Task-Icon Manipulation
+<!-- Is this a subset of on-going tasks? -->
 When a team queues a task, other teams may lend support. 
     The support may succeed or fail.
         If they succeed, an icon is added to the Task
@@ -57,6 +58,23 @@ Then, the player enters a new menu and either cancels the task, or executes it.
     A BIOTECH team can complete the Muton Briefing, removing the Muton icons from the task, if any.
         Or, the icon is temporarily added to the XCOM team. This can provide a nice bark :)
 
+# MVP-XX -- Stand-by Tasks
+Some tasks can be put on stand-by.
+The moment they are eligible to be done, they are done.
+    on-going tasks are cancelled to perform this
+    in-progress tasks are completed before performing this.
+
+# MVP-XX -- Cooldown Icons
+Instead of going on cooldown, some teams can gain temporary icons.
+These icons can be removed by specific tasks. 
+    Example: 
+
+# MVP-XX -- On-Going Tasks II
+These also apply to "friendly teams".
+    Example: ACADEMY has a task Sectiod Theory, and it grants the XCOM team a Section Icon for the duration of the task.
+Teams would need to have a limited amount of "slots", representing how much time in a day they have to train. 
+    When they are on cooldown, they lose all bonus icons.
+    _or cooldown adds bad icons that need to be cleared through R&R..?_
 
 # MVP-XX -- On-Going Tasks
 Some tasks, once completed, continue to give its bonus. 
@@ -80,7 +98,6 @@ Task wincons and losecons are also hidden until discovered.
 Eventually, I want the player to attempt tasks to see what sort of Icons they require.
 (This could done via RECON - a dummy team who simply runs the icons, fails them all, and gets put on cooldown)
 
-
 # MVP-05 -- Icon Information
 Display icon information for Tasks and Teams.
     These will be discoverable...
@@ -90,7 +107,7 @@ Change workflow so that tasks are QUEUED.
 The user may return the task state to AVAILABLE through some other menu?
 Ending the turn executes all QUEUED tasks.
 
-# MVP-03 -- Task Engine
+# [COMPLETE] MVP-03 -- Task Engine
 Need to support a task creating new tasks.
 I almost already have this done. But I want to formalize it inside the task, not in the code. 
     And as a list.

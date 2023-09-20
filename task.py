@@ -13,7 +13,7 @@ class TaskState(Enum):
 
 
 class Task:
-    def __init__(self, name: str, description: str, category: str, icons: List[Icon], wincon: int, losecon: int, barks: List[str], fail_barks: List[str] = None):
+    def __init__(self, name: str, description: str, category: str, icons: List[Icon], wincon: int, losecon: int, barks: List[str] = [], fail_barks: List[str] = [], win_tasks: List[str] = [], lose_tasks: List[str] = []):
         self.name = name
         self.description = description # not really a description, more like the opening bark.
         self.category = category
@@ -22,6 +22,7 @@ class Task:
         self.losecon = losecon
         self.barks = barks
         self.fail_barks = fail_barks
+        self.win_tasks = win_tasks
 
         self.state = TaskState.AVAILABLE
 
@@ -39,6 +40,7 @@ def task_factory(task: str) -> Task:
                 icons=[icon_factory("attack")],
                 wincon=6,
                 losecon=4,
+                
             )
         #
         # SIGINT
@@ -50,6 +52,7 @@ def task_factory(task: str) -> Task:
                 category="sigint",
                 icons=[icon_factory("analysis"), icon_factory("analysis"), icon_factory("observation")],
                 wincon=6,
+                win_tasks=["sigint_2", "satcom_1"],
                 losecon=4,
                 barks=[
                     "Preliminary sweeps complete. Slight irregularities in signal background observed: begin signal optimization.",     #0

@@ -22,7 +22,7 @@ class Game:
         self.add_team(team_factory("sigint"))
         self.add_team(team_factory("satcom"))
         self.alerts: Dict[str, int] = {"sigint": 0, "satcom": 0, "xcom": 0}
-        self.task_queue: List[tuple[Task, Team]] = []
+        self.task_queue: List[tuple[Task, Team]] = [] # These tasks are performed at the end.
 
 
     def push_state(self, state: BaseState):
@@ -174,7 +174,8 @@ class Game:
         
         for task in self.tasks:
             if task.state == TaskState.SUCCESSFUL:
-                self.add_task(task_factory("sigint_2"))
+                for task_codename in task.win_tasks:
+                    self.add_task(task_factory(task_codename))
             
             match task.state:
                 case TaskState.SUCCESSFUL:
