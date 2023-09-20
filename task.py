@@ -10,9 +10,12 @@ class TaskState(Enum):
     SUCCESSFUL = 3
     UNSUCCESSFUL = 4
     CHOSEN = 5
+    QUEUED = 6
 
 
 class Task:
+    task_counter = 0
+
     def __init__(self, name: str, description: str, category: str, icons: List[Icon], wincon: int, losecon: int, barks: List[str] = [], fail_barks: List[str] = [], win_tasks: List[str] = [], lose_tasks: List[str] = []):
         self.name = name
         self.description = description # not really a description, more like the opening bark.
@@ -25,6 +28,8 @@ class Task:
         self.win_tasks = win_tasks
 
         self.state = TaskState.AVAILABLE
+        self.id = Task.task_counter
+        Task.task_counter += 1
 
 
 def task_factory(task: str) -> Task:

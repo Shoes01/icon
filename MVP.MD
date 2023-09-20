@@ -103,6 +103,8 @@ Display icon information for Tasks and Teams.
     These will be discoverable...
 
 # MVP-04 -- Task Queue and Execution
+Tasks and Teams probably need and ID of some sort. 
+
 Change workflow so that tasks are QUEUED. 
 The user may return the task state to AVAILABLE through some other menu?
 Ending the turn executes all QUEUED tasks.

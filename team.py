@@ -12,6 +12,8 @@ class TeamState(Enum):
 
 
 class Team:
+    team_counter = 0
+    
     def __init__(self, name: str, category: str, icons: List[Icon]):
         self.name = name
         self.category = category
@@ -19,6 +21,8 @@ class Team:
 
         self.state = TeamState.AVAILABLE
         self.cooldown = 0
+        self.id = Team.team_counter
+        Team.team_counter += 1
 
 
 def team_factory(team: str) -> Team:
