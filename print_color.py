@@ -45,15 +45,15 @@ def print_color(text: str, fore: str="normal", back: str="normal", style: str="n
     
     output += f"{text}{end}{Style.RESET_ALL}"
     
+    skip_print = False
     if slow_print:
-        skip_print = False
+        if not skip_print:
+            time.sleep(random.uniform(0.3, 0.8))
         for char in output:
             if msvcrt.kbhit():
                 skip_print = True
             print(char, end="", flush=True)
             if not skip_print: time.sleep(0.005 * random.uniform(1.0, 3.0))
-        if not skip_print:
-            time.sleep(random.uniform(0.3, 0.8))
     else:
         print(output, end="")
 

@@ -1,4 +1,3 @@
-from colorama import init, Fore, Style
 import random
 from typing import Dict, Any, List
 import os
@@ -23,28 +22,36 @@ def do_combat(team: Team, task: Task) -> Dict[str, Any]:
     num_lines = max(12, terminal_size.lines - 2)
     print(f"\033[{num_lines}A", end="")
 
-    print_important_text(f"{task.name.upper()}.", slow_print=True)
+    print_important_text(f"{task.name.upper()}", slow_print=True)
     print_regular_text("\n" + task.description + "\n", slow_print=True)
     
     wins = 0
     losses = 0
     success = False
     for icon in task_icon_pattern:
+        print_good_combat_text(f"{task.steps[wins][0][:-1]}", end="", slow_print=True) # Don't print the final period.
+        # print a random number of periods between 1 and 4.
+        for _ in range(random.randint(2, 6)):
+            time.sleep(0.2)
+            print(".", end="")
+        time.sleep(0.2)
+        print(" ", end="")
+
         if icon.name in team_icon_names:
-            print_important_text("[+]", end="", slow_print=True)
-            print_good_combat_text(f" : {task.barks[wins]}", slow_print=True)
+            print_important_text("[+]", end="", slow_print=False)
+            print_good_combat_text(f" {task.steps[wins][1]}", slow_print=True)
             wins += 1
         else:
-            print_bad_text("[-]", end="", slow_print=True)
-            print_bad_combat_text(f" : {task.fail_barks[wins]}", slow_print=True)
+            print_bad_text("[-]", end="", slow_print=False)
+            print_bad_combat_text(f" {task.steps[wins][2]}", slow_print=True)
             losses += 1
         
         if wins >= task.wincon:
-            print_good_text(f"\n{task.barks[-1]}\n", slow_print=True)
+            print_good_text(f"\n{task.bark_win}\n", slow_print=True)
             success = True
             break
         elif losses >= task.losecon:
-            print_bad_text(f"\n{task.fail_barks[-1]}\n", slow_print=True)
+            print_bad_text(f"\n{task.bark_fail}\n", slow_print=True)
             success = False
             break
     

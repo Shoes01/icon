@@ -1,3 +1,6 @@
+# MVP-XX -- Varied Barks
+Have more than a few barks per step
+
 # MVP-XX -- Different Wincons for Different Icons
 Getting 6 wins before 4 losses : already in
 Getting X in a row before 4 losses : hmm
@@ -108,7 +111,7 @@ Eventually, I want the player to attempt tasks to see what sort of Icons they re
 Display icon information for Tasks and Teams.
     These will be discoverable...
 
-# MVP-05 -- Juicy Combat Log
+# [COMPLETED] MVP-05 -- Juicy Combat Log
 "Beginning this thing..." then roll if it succeeds or not. Then bark the win or the loss. J U I C Y
 
 # [COMPLETE] MVP-04 -- Task Queue and Execution

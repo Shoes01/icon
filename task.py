@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 from enum import Enum
 
 from icon import Icon, icon_factory
@@ -16,16 +16,18 @@ class TaskState(Enum):
 class Task:
     task_counter = 0
 
-    def __init__(self, name: str, description: str, category: str, icons: List[Icon], wincon: int, losecon: int, barks: List[str] = [], fail_barks: List[str] = [], win_tasks: List[str] = [], lose_tasks: List[str] = []):
+    def __init__(self, name: str, description: str, category: str, icons: List[Icon], wincon: int, losecon: int, steps: List[Tuple[str, str, str]] = [("", "", "")], bark_win: str = "", bark_fail: str = "", win_tasks: List[str] = [], lose_tasks: List[str] = []):
         self.name = name
         self.description = description # not really a description, more like the opening bark.
         self.category = category
         self.icons = icons
         self.wincon = wincon
         self.losecon = losecon
-        self.barks = barks
-        self.fail_barks = fail_barks
+        self.bark_win = bark_win
+        self.bark_fail = bark_fail
+        self.steps = steps # (step, success, failure)
         self.win_tasks = win_tasks
+        self.lose_tasks = lose_tasks
 
         self.state: TaskState = TaskState.AVAILABLE
         self.id: int = Task.task_counter
@@ -54,69 +56,109 @@ def task_factory(task: str) -> Task:
         case "sigint_1":
             return Task(
                 name="Extraterrestrial Signal Detection and Analysis", 
-                description="Task Scanning frequency bands for unusual signal patterns...", 
+                description="Scanning frequency bands for unusual signal patterns...", 
                 category="sigint",
                 icons=[icon_factory("analysis"), icon_factory("analysis"), icon_factory("observation")],
                 wincon=6,
-                win_tasks=["sigint_2", "satcom_1"],
                 losecon=4,
-                barks=[
-                    "Preliminary sweeps complete. Slight irregularities in signal background observed: begin signal optimization.",     #0
-                    "Optimization ongoing. Possible faint anomalies in signal patterns noted: refining parameters",                     #1
-                    "Optimization complete: Alien signal detected, still weak and intermittent. Begin signal analysis via FTT.",        #2
-                    "Fast-Fourier Transform underway: frequency spectrum dissected; unique spectral patterns identified. Implementing PCA.", #3
-                    "Signal analysis update: PCA identified key components. Proritizing data for further analysis.",     #4
-                    "Analysis complete: reliable reception of alien communications achieved.",                                          #5
-                    "Extraterrestrial signal detection and analysis successful.",                                                       # The victory bark.
-                ],
-                fail_barks=[
-                    "No unusual patterns detected... recalibrating...",                                                                 #0
-                    "Unusual signal interference detected, disrupting initial scans.",                                                  #1
-                    "Irregularities persist, obscuring further observations.",                                                          #2
-                    "Analysis setback: FFT algorithm struggles to reveal spectral patterns in the elusive alien transmission.",         #3
-                    "PCA challenge: Critical components in the alien transmission elude identification, complicating prioritization.",  #4
-                    "Parameters adjustment faltering: Alien signal weakens further, intermittent transmission disrupts analysis.",      #5 -- I don't think this one will ever be seen?
-                    "Reliability compromised: alien signal is lost.",                                                                   # The failure bark.
+                win_tasks=["sigint_2", "satcom_1"],
+                bark_win="Extraterrestrial signal detection and analysis successful.",
+                bark_fail="Reliability compromised: alien signal is lost.",
+                steps=[
+                    ("Commencing preliminary scans.", 
+                           "Slight irregularities in signal background observed.",
+                           "No unusual patterns detected. Recalibrating."),
+                    ("Begin signal optmization.",
+                            "Possible faint anomalies in signal patterns noted.",
+                            "Unusual signal interference detected, disrupting initial scans."),
+                    ("Refining parameters.",
+                            "Alien signal detected, still weak and intermittent.",
+                            "Irregularities persist, obscuring further observations."),
+                    ("Begin signal analysis via FFT.",
+                            "Frequency spectrum dissected; unique spectral patterns identified.",
+                            "Analysis setback: FFT algorithm struggles to reveal spectral patterns in the elusive alien transmission."),
+                    ("Implementing PCA.",
+                            "PCA identified key components.",
+                            "PCA challenge: Critical components in the alien transmission elude identification, complicating prioritization."),
+                    ("Proritizing data for further analysis.",
+                            "Reliable reception of alien communications achieved.",
+                            "Parameters adjustment faltering: Alien signal weakens further, intermittent transmission disrupts analysis."),
                 ],
             )
         case "sigint_2":
             return Task(
-                name="SIGINT Task 2",
-                description="This is a SIGNALS INTELLIGENCE task (2).",
+                name="Data Mining",
+                description="Mining data from alien signal...",
                 category="sigint",
                 icons=[icon_factory("observation")],
-                wincon=6,
+                wincon=8,
                 losecon=4,
-            )
+                bark_win="Valuable insights extracted from alien signal.",
+                bark_fail="Unexpected complexities in data hindered our ability to extract meaningful insights. Further analysis and refinement needed.",
+                steps=[
+                    ("Initiating data mining process with feature selection and dimensionality reduction.",
+                        "Feature selection and dimensionality reduction successful; optimized dataset ready for analysis.",
+                        "Challenges encountered during feature selection; refining techniques for improved data reduction."),
+                    ("Clustering data points to identify hidden patterns and groups.",
+                        "Cluster analysis complete; revealing valuable insights from grouped data points.",
+                        "Complex data patterns detected; further analysis needed for precise clustering."),
+                    ("Utilizing regression analysis to model relationships and make predictions.",
+                        "Regression models successfully developed; accurate predictions derived.",
+                        "Regression challenges encountered; refining models for improved predictive performance."),
+                    ("Applying classification algorithms to predict categorical outcomes.",
+                        "Classification models successfully trained; accurate predictions generated.",
+                        "Classification complexities encountered; optimizing models for improved accuracy."),
+                    ("Mining sequential patterns to identify temporal trends and behaviors.",
+                        "Sequential pattern mining reveals valuable temporal insights.",
+                        "Temporal pattern complexities detected; further analysis required for precise trend identification."),
+                    ("Leveraging text mining and NLP techniques to extract meaningful insights from unstructured data.",
+                        "Text mining and NLP analysis complete; valuable information extracted from textual data.",
+                        "NLP complexities encountered; optimizing techniques for improved text analysis."),
+                    ("Implementing ensemble methods to enhance model accuracy and robustness.",
+                        "Ensemble methods applied successfully; improved model accuracy achieved.",
+                        "Ensemble challenges encountered; fine-tuning methods for enhanced model performance."),
+                    ("Data preprocessing and cleaning to ensure dataset quality and integrity.",
+                        "Data preprocessing complete; clean and well-prepared dataset for mining.",
+                        "Data preprocessing challenges encountered; refining techniques for improved data quality."),
+                    ]
+                )
         #
         # SATCOM
         #
         case "satcom_1":
             return Task(
                 name="Signal Source Tracking",
-                description="Task initiated: Position satellite arrays to pinpoint source location...",
+                description="Positioning satellite arrays for real-time source tracking.",
                 category="satcom",
                 icons=[icon_factory("observation"), icon_factory("communication"), icon_factory("jamming")],
                 wincon=6,
                 losecon=4,
-                barks=[
-                    "Origin assessment complete: Signal source localized to specified coordinates; now leveraging differential GPS data for precise satellite array configuration.",
-                    "Satellite array configured for optimal coverage over signal source region; implementing orbital adjustment with real-time data from differential GPS systems.",
-                    "Orbital adjustment successful, ensuring continuous coverage; initiating frequency monitoring with adaptive beamforming techniques for enhanced accuracy.",
-                    "Frequency monitoring activated with real-time data stream; commencing data correlation, utilizing advanced machine learning algorithms for pattern recognition.",
-                    "Data correlation successfully accomplished, source triangulated with precision; advancing to establish real-time tracking with Kalman filtering for accurate predictions.",
-                    "Real-time tracking operational, monitoring signal source movements; proceeding to execute data relay, integrating geospatial data for context-aware relay decisions.",
-                    "Data relay successfully executed, tracking data and source information transmitted; progressing to maintain continuous monitoring with data fusion from multiple sensors.",
-                    "Continuous monitoring in progress, signal source tracked and updated; maintaining situational awareness through the integration of geospatial databases and real-time signal analysis.",
-                ],
-                fail_barks=[
-                    "Setback encountered: Differential GPS data fluctuations affecting precise satellite array configuration; recalibrating for accuracy.",
-                    "Adjustment challenges: Real-time differential GPS data discrepancies impact orbital configuration; readjusting for consistent coverage.",
-                    "Beamforming hiccups: Adaptive beamforming limitations affecting frequency monitoring accuracy; optimizing for reliable data.",
-                    "Data correlation complexity: Machine learning algorithm challenges affecting pattern recognition; refining for precise data correlation.",
-                    "Kalman filtering difficulties: Precision in real-time tracking hampered by parameter adjustments; recalibrating for improved accuracy.",
-                    "Integration issues: Geospatial data inconsistencies impacting context-aware relay decisions during data relay; revising integration protocols.",
-                    "Fusion challenges: Data fusion complexities affecting real-time sensor collaboration; optimizing for seamless continuous monitoring.",
-                    "Signal source tracking failed: geospatial database reliability unusable.",
+                bark_win="Maintaining situational awareness through the integration of geospatial databases and real-time signal analysis.",
+                bark_fail="Unexpected interference disrupted ability to pinpoint the signal source. Further investigation required.",
+                steps = [
+                    ("Initiating signal source tracking.",
+                        "Tracking process successfully initiated.", 
+                        "Failed to initiate tracking process."),
+                    ("Configuring satellite array for optimal coverage.", 
+                        "Satellite array configuration successful.", 
+                        "Configuration failed; readjustment required."),
+                    ("Adjusting satellite orbits for continuous coverage.", 
+                        "Orbital adjustment completed successfully.", 
+                        "Orbital adjustment encountered issues; further adjustments needed."),
+                    ("Activating frequency monitoring with adaptive beamforming.", 
+                        "Frequency monitoring and beamforming activated.", 
+                        "Beamforming challenges; optimizing for reliable data."),
+                    ("Performing data correlation with machine learning algorithms.", 
+                        "Data correlation and pattern recognition successful.", 
+                        "Data correlation complexity; refining for precise results."),
+                    ("Establishing real-time tracking using Kalman filtering.", 
+                        "Real-time tracking operational with Kalman filtering.", 
+                        "Kalman filtering difficulties; recalibrating for improved accuracy."),
+                    ("Executing data relay with geospatial data integration.", 
+                        "Data relay successfully executed; information transmitted.", 
+                        "Integration issues encountered; revising protocols for future attempts."),
+                    ("Maintaining continuous monitoring with data fusion.", 
+                        "Continuous monitoring ongoing with data fusion.", 
+                        "Data fusion complexities; optimizing for seamless collaboration.")
                 ],
             )
