@@ -38,14 +38,21 @@ class SigintScreen(BaseState):
             return result
 
         if self.chosen_team is None:
+            if self.teams[user_input-1].state != TeamState.AVAILABLE:
+                print_text_error("This team is assigned to a task already.")
+                return result
             self.chosen_team = self.teams[user_input-1]
             self.chosen_team.state = TeamState.CHOSEN
             self.on_menu = "two"
             result["chose a team, now waiting for a task."] = False
         else:
+            if self.tasks[user_input-1].state != TaskState.AVAILABLE:
+                print_text_error("This task is assigned to a team already.")
+                return result
             self.chosen_task = self.tasks[user_input-1]
             self.chosen_team.state = TeamState.WORKING
-            self.chosen_task.state = TaskState.IN_PROGRESS
-            result["task"] = (self.chosen_task, self.chosen_team)
+            self.chosen_task.state = TaskState.QUEUED
+            self.chosen_task.assigned_team_id = self.chosen_team.id
+            result["task_assigned"] = True
         
         return result

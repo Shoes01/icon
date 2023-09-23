@@ -24,13 +24,10 @@ class BaseState:
     
     
     def sanitize_input(self, user_input: str) -> int:
+        #I don't think I like this anymore.
         try:
             user_input = int(user_input)
-            if user_input < 0 or user_input > len(self.menu_options):
-                print_text_error("Invalid choice. Please enter a number between 1 and ", len(self.menu_options))
-                return -1
-            else:
-                return user_input
+            return user_input
         except ValueError:
             print_text_error("Invalid input. Please enter a number.")
             return -1

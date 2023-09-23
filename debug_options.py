@@ -1,0 +1,5 @@
+# Default True
+DEBUG_ALWAYS_CLEAR_TEMRINAL = True
+# Default False
+DEBUG_ALWAYS_PRINT_FAST = False
+DEBUG_ALWAYS_PRINT_STATE = False

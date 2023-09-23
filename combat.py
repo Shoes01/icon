@@ -2,6 +2,8 @@ from colorama import init, Fore, Style
 import random
 from typing import Dict, Any, List
 import os
+import time
+import random
 
 from task import Task, TaskState
 from team import Team, TeamState
@@ -57,40 +59,4 @@ def do_combat(team: Team, task: Task) -> Dict[str, Any]:
     print_text_input("\nPress any key to conclude combat.\n")
     input()
 
-    return {"combat": (team, task)}
-
-
-def do_combat_SIGINT_fromAI(team: Team, task: Task) -> Dict[str, Any]:
-    # Define the task requirements
-    # EXAMPLE:
-    ### task_requirements = {
-    ###     "Analysis": {"Analysize": 6, "Holographic Encryption": 2},
-    ###     "Encryption": {"Holographic Encryption": 4, "Decryption": 3},
-    ###     "Decryption": {"Decryption": 5, "Analysize": 2}
-    ### }
-    task_requirements = task.requirements 
-
-    # Define the initial task status
-    task_status = {task: {icon: 0 for icon in requirements} for task, requirements in task_requirements.items()}
-
-    # Define the maximum number of incorrect matches allowed
-    max_incorrect_matches = 4
-
-    # Define the current number of incorrect matches
-    incorrect_matches = 0
-
-    # Loop until the combat is won or lost
-    while True:
-        # TODO: Implement code to display the current task status and prompt the user for input
-
-        # TODO: Implement code to update the task status based on the user's input
-
-        # Check if the combat has been won
-        if all(icon_count >= required_count for requirements in task_requirements.values() for icon, required_count in requirements.items() for task, icon_count in task_status.items() if task in task_requirements and icon in requirements):
-            print("Combat won!")
-            break
-
-        # Check if the combat has been lost
-        if incorrect_matches >= max_incorrect_matches:
-            print("Combat lost!")
-            break
+    return {"combat": True}

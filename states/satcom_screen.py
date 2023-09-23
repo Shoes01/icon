@@ -21,31 +21,37 @@ class SatcomScreen(BaseState):
 
     def render(self):
         print_important_text(self.menu_title)
-        prompt = "Choose a team." if self.on_menu == "one" else "Choose a team."
+        prompt = "Choose a team." if self.on_menu == "one" else "Choose a task."
         print_regular_text(prompt)
         print_two_columns(self.teams, self.tasks)
 
 
     def handle_input(self, user_input: int) -> Dict[str, Any]:
         result: Dict[str, Any] = {}
-
         # Need extra safety checks for user input.
         if self.on_menu == "one" and (user_input < 1 or user_input > len(self.teams)):
-            print_text_error("Invalid choice. Please enter a number between 1 and ", len(self.teams))
+            print_text_error(f"Invalid choice ({user_input=}). Please enter a number between 1 and ", len(self.teams))
             return result
         if self.on_menu == "two" and (user_input < 1 or user_input > len(self.tasks)):
-            print_text_error("Invalid choice. Please enter a number between 1 and ", len(self.tasks))
+            print_text_error(f"Invalid choice ({user_input=}). Please enter a number between 1 and ", len(self.tasks))
             return result
 
         if self.chosen_team is None:
+            if self.teams[user_input-1].state != TeamState.AVAILABLE:
+                print_text_error("This team is assigned to a task already.")
+                return result
             self.chosen_team = self.teams[user_input-1]
             self.chosen_team.state = TeamState.CHOSEN
             self.on_menu = "two"
             result["chose a team, now waiting for a task."] = False
         else:
+            if self.tasks[user_input-1].state != TaskState.AVAILABLE:
+                print_text_error("This task is assigned to a team already.")
+                return result
             self.chosen_task = self.tasks[user_input-1]
             self.chosen_team.state = TeamState.WORKING
-            self.chosen_task.state = TaskState.IN_PROGRESS
-            result["task"] = (self.chosen_task, self.chosen_team)
+            self.chosen_task.state = TaskState.QUEUED
+            self.chosen_task.assigned_team_id = self.chosen_team.id
+            result["task_assigned"] = True
         
         return result

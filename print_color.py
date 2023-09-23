@@ -1,19 +1,24 @@
 from colorama import Fore, Style, Back, init
 from typing import List
 import time
+import random
 import msvcrt
 
 
 from task import Task, TaskState
 from team import Team, TeamState
+from debug_options import DEBUG_ALWAYS_PRINT_FAST
 
 
 init()
 
 
 def print_color(text: str, fore: str="normal", back: str="normal", style: str="normal", end: str="\n", slow_print=False):
-    output: str = ""
+    if DEBUG_ALWAYS_PRINT_FAST:
+        slow_print = False
     
+    output: str = ""
+
     match fore:
         case "normal":
             output += f"{Fore.WHITE}"
@@ -39,13 +44,16 @@ def print_color(text: str, fore: str="normal", back: str="normal", style: str="n
             output += f"{Style.DIM}"
     
     output += f"{text}{end}{Style.RESET_ALL}"
+    
     if slow_print:
         skip_print = False
         for char in output:
             if msvcrt.kbhit():
                 skip_print = True
             print(char, end="", flush=True)
-            if not skip_print: time.sleep(0.005)
+            if not skip_print: time.sleep(0.005 * random.uniform(1.0, 3.0))
+        if not skip_print:
+            time.sleep(random.uniform(0.3, 0.8))
     else:
         print(output, end="")
 
@@ -56,6 +64,7 @@ def print_text_input(text: str, end: str="", slow_print=False):
 
 def print_text_error(text: str, end: str="\n", slow_print=False):
     print_color(text, fore="red", end=end, slow_print=slow_print)
+    input()
 
 
 def print_important_text(text: str, end: str="\n", slow_print=False):
@@ -109,10 +118,10 @@ def print_two_columns(col_teams: List[Task], col_tasks: List[Team], col_width: i
             match col_tasks[i].state:
                 case TaskState.CHOSEN:
                     task = f"{Fore.BLACK}{Back.GREEN}{Style.BRIGHT}{task}{Style.RESET_ALL}"
-                case TaskState.IN_PROGRESS:
-                    task = f"{Fore.YELLOW}{task}{Style.RESET_ALL}"
                 case TaskState.AVAILABLE:
                     task = f"{Fore.GREEN}{task}{Style.RESET_ALL}"
+                case TaskState.QUEUED:
+                    task = f"{Fore.YELLOW}{task}{Style.RESET_ALL}"
         
         if len(col_teams) > i:
             team = f"{i+1}. {col_teams[i].name}"

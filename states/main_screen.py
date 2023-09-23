@@ -7,7 +7,7 @@ from print_color import print_regular_text, print_important_text, print_good_tex
 
 
 title = "Welcome, commander."
-options = ["sigint", "satcom", "xcom"]
+options = ["SIGINT", "SATCOM", "XCOM", "Task Queue"]
 
 
 class MainScreen(BaseState):
@@ -40,32 +40,40 @@ class MainScreen(BaseState):
         # Print departments and their tasks.
         text = ""
         for i, option in enumerate(self.menu_options):
-            text += f"{i+1}. {option.upper():<8}"
-            # Add the number of tasks for each option
-            tasks_available = 0
-            tasks_in_progress = 0
-            for task in self.tasks:
-                if task.category == option:
-                    match task.state:
-                        case TaskState.AVAILABLE:
-                            tasks_available += 1
-                        case TaskState.IN_PROGRESS:
-                            tasks_in_progress += 1
-            s1 = "" if tasks_available == 1 else "s"
-            s2 = "" if tasks_in_progress == 1 else "s"
-            text += f"\n  > {tasks_available} task{s1} available, {tasks_in_progress} task{s2} in progress."
-            teams_available = 0
-            teams_on_cooldown = 0
-            for team in self.teams:
-                if team.category == option:
-                    match team.state:
-                        case TeamState.AVAILABLE:
-                            teams_available += 1
-                        case TeamState.COOLDOWN:
-                            teams_on_cooldown += 1
-            s1 = "" if teams_available == 1 else "s"
-            s2 = "" if teams_on_cooldown == 1 else "s"
-            text += f"\n  > {teams_available} team{s1} available, {teams_on_cooldown} team{s2} on cooldown.\n"
+            text += f"{i+1}. {option:<8}"
+            if option.lower() in ["sigint", "satcom", "xcom"]:
+                # Add the number of tasks for each option
+                tasks_available = 0
+                tasks_queued = 0
+                for task in self.tasks:
+                    if task.category == option.lower() and option.lower() != "task queue": # TODO: This is lazy. It's matching the name of the option to the type of task.
+                        match task.state:
+                            case TaskState.AVAILABLE:
+                                tasks_available += 1
+                            case TaskState.QUEUED:
+                                tasks_queued += 1
+                s1 = "" if tasks_available == 1 else "s"
+                s2 = "" if tasks_queued == 1 else "s"
+                text += f"\n  > {tasks_available} task{s1} available, {tasks_queued} task{s2} queued."
+                teams_available = 0
+                teams_on_cooldown = 0
+                for team in self.teams:
+                    if team.category == option.lower(): # TODO: This is lazy, too.
+                        match team.state:
+                            case TeamState.AVAILABLE:
+                                teams_available += 1
+                            case TeamState.COOLDOWN:
+                                teams_on_cooldown += 1
+                s1 = "" if teams_available == 1 else "s"
+                s2 = "" if teams_on_cooldown == 1 else "s"
+                text += f"\n  > {teams_available} team{s1} available, {teams_on_cooldown} team{s2} on cooldown.\n"
+            elif option.lower() == "task queue":
+                tasks_in_queue = 0
+                for task in self.tasks:
+                    if task.state == TaskState.QUEUED:
+                        tasks_in_queue += 1
+                s = "" if tasks_in_queue == 1 else "s"
+                text += f"\n  > {tasks_in_queue} task{s} in queue.\n"
         text += "\n0. End Turn"
         print_regular_text(text)
 
@@ -80,6 +88,8 @@ class MainScreen(BaseState):
                 return {"satcom": True}
             case 3:
                 return {"xcom": True}
+            case 4:
+                return {"task_queue": True}
             case 0:
                 self.alters_are_read = False
                 return {"end_turn": True}

@@ -6,7 +6,7 @@ from icon import Icon, icon_factory
 
 class TaskState(Enum):
     AVAILABLE = 1
-    IN_PROGRESS = 2
+    #IN_PROGRESS = 2 # Deprecated.
     SUCCESSFUL = 3
     UNSUCCESSFUL = 4
     CHOSEN = 5
@@ -27,9 +27,10 @@ class Task:
         self.fail_barks = fail_barks
         self.win_tasks = win_tasks
 
-        self.state = TaskState.AVAILABLE
-        self.id = Task.task_counter
+        self.state: TaskState = TaskState.AVAILABLE
+        self.id: int = Task.task_counter
         Task.task_counter += 1
+        self.assigned_team_id: int = -1
 
 
 def task_factory(task: str) -> Task:
