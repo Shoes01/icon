@@ -16,14 +16,14 @@ class MainScreen(BaseState):
         self.alerts = alerts
         self.tasks = tasks
         self.teams = teams
-        self.alters_are_read = False
+        self.alerts_are_read = False
 
 
     def render(self):
         print_important_text(self.menu_title)
         
         # Print alerts, if any.
-        if self.alters_are_read is False:
+        if self.alerts_are_read is False:
             new_alerts = 0
             for alert_number in self.alerts.values():
                 if alert_number > 0:
@@ -35,14 +35,14 @@ class MainScreen(BaseState):
                     print_good_text(f"  New {alert[0].upper()} tasks: {alert[1]}.")
                     want_whitespace = False
             if want_whitespace: print()
-            self.alters_are_read = True
+            self.alerts_are_read = True
         
         # Print departments and their tasks.
         text = ""
         for i, option in enumerate(self.menu_options):
-            text += f"{i+1}. {option:<8}"
+            text += f"{i+1}. {option:<12}"
             if option.lower() in ["sigint", "satcom", "xcom"]:
-                # Add the number of tasks for each option
+                # Prepare tasks.
                 tasks_available = 0
                 tasks_queued = 0
                 for task in self.tasks:
@@ -54,9 +54,10 @@ class MainScreen(BaseState):
                                 tasks_queued += 1
                 s1 = "" if tasks_available == 1 else "s"
                 s2 = "" if tasks_queued == 1 else "s"
-                text += f"\n  > {tasks_available} task{s1} available, {tasks_queued} task{s2} queued."
+                # Prepare teams.
                 teams_available = 0
                 teams_on_cooldown = 0
+                teams_working = 0
                 for team in self.teams:
                     if team.category == option.lower(): # TODO: This is lazy, too.
                         match team.state:
@@ -64,16 +65,20 @@ class MainScreen(BaseState):
                                 teams_available += 1
                             case TeamState.COOLDOWN:
                                 teams_on_cooldown += 1
-                s1 = "" if teams_available == 1 else "s"
-                s2 = "" if teams_on_cooldown == 1 else "s"
-                text += f"\n  > {teams_available} team{s1} available, {teams_on_cooldown} team{s2} on cooldown.\n"
+                            case TeamState.WORKING:
+                                teams_working += 1
+                s3 = "" if teams_available == 1 else "s"
+                s4 = "" if teams_on_cooldown == 1 else "s"
+                text += f" || {teams_available}/{teams_available+teams_on_cooldown+teams_working} teams available, {tasks_available}/{tasks_available+tasks_queued} tasks available.\n"
+                #text += f"\n  > {tasks_available} task{s1} available, {tasks_queued} task{s2} queued."
+                #text += f"\n  > {teams_available} team{s3} available, {teams_on_cooldown} team{s4} on cooldown.\n"
             elif option.lower() == "task queue":
                 tasks_in_queue = 0
                 for task in self.tasks:
                     if task.state == TaskState.QUEUED:
                         tasks_in_queue += 1
                 s = "" if tasks_in_queue == 1 else "s"
-                text += f"\n  > {tasks_in_queue} task{s} in queue.\n"
+                text += f" || {tasks_in_queue} task{s} in queue.\n"
         text += "\n0. End Turn"
         print_regular_text(text)
 
@@ -91,5 +96,5 @@ class MainScreen(BaseState):
             case 4:
                 return {"task_queue": True}
             case 0:
-                self.alters_are_read = False
+                self.alerts_are_read = False
                 return {"end_turn": True}

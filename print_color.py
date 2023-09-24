@@ -28,12 +28,36 @@ def print_color(text: str, fore: str="normal", back: str="normal", style: str="n
             output += f"{Fore.RED}"
         case "black":
             output += f"{Fore.BLACK}"
+        case "cyan":
+            output += f"{Fore.CYAN}"
+        case "yellow":
+            output += f"{Fore.YELLOW}"
+        case "magenta":
+            output += f"{Fore.MAGENTA}"
+        case "blue":
+            output += f"{Fore.BLUE}"
+        case "white":
+            output += f"{Fore.WHITE}"
     
     match back:
         case "normal":
             output += f"{Back.BLACK}"
         case "green":
             output += f"{Back.GREEN}"
+        case "red":
+            output += f"{Back.RED}"
+        case "black":
+            output += f"{Back.BLACK}"
+        case "cyan":
+            output += f"{Back.CYAN}"
+        case "yellow":
+            output += f"{Back.YELLOW}"
+        case "magenta":
+            output += f"{Back.MAGENTA}"
+        case "blue":
+            output += f"{Back.BLUE}"
+        case "white":
+            output += f"{Back.WHITE}"
     
     match style:
         case "normal":
@@ -80,7 +104,7 @@ def print_VIP_text(text: str, end: str="\n", slow_print=False):
 
 
 def print_good_text(text: str, end: str="\n", slow_print=False):
-    print_color(text, fore="cyan", style="bright", end=end, slow_print=slow_print)
+    print_color(text, fore="white", style="bright", end=end, slow_print=slow_print)
 
 
 def print_bad_text(text: str, end: str="\n", slow_print=False):
@@ -88,7 +112,7 @@ def print_bad_text(text: str, end: str="\n", slow_print=False):
 
 
 def print_good_combat_text(text:str, end: str="\n", slow_print=False):
-    print_color(text, fore="cyan", end=end, slow_print=slow_print)
+    print_color(text, fore="white", end=end, slow_print=slow_print)
 
 
 def print_bad_combat_text(text:str, end: str="\n", slow_print=False):

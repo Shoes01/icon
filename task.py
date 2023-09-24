@@ -16,7 +16,7 @@ class TaskState(Enum):
 class Task:
     task_counter = 0
 
-    def __init__(self, name: str, description: str, category: str, icons: List[Icon], wincon: int, losecon: int, steps: List[Tuple[str, str, str]] = [("", "", "")], bark_win: str = "", bark_fail: str = "", win_tasks: List[str] = [], lose_tasks: List[str] = []):
+    def __init__(self, name: str, description: str, category: str, icons: List[Icon], wincon: int, losecon: int, steps: List[List[Tuple[str, str, str]]] = [("", "", "")], bark_win: str = "", bark_fail: str = "", win_tasks: List[str] = [], lose_tasks: List[str] = []):
         self.name = name
         self.description = description # not really a description, more like the opening bark.
         self.category = category
@@ -25,7 +25,7 @@ class Task:
         self.losecon = losecon
         self.bark_win = bark_win
         self.bark_fail = bark_fail
-        self.steps = steps # (step, success, failure)
+        self.steps = steps # (step, success, failure) -- grab a random list from within, and then get the step.
         self.win_tasks = win_tasks
         self.lose_tasks = lose_tasks
 
@@ -64,26 +64,93 @@ def task_factory(task: str) -> Task:
                 win_tasks=["sigint_2", "satcom_1"],
                 bark_win="Extraterrestrial signal detection and analysis successful.",
                 bark_fail="Reliability compromised: alien signal is lost.",
-                steps=[
-                    ("Commencing preliminary scans.", 
-                           "Slight irregularities in signal background observed.",
-                           "No unusual patterns detected. Recalibrating."),
-                    ("Begin signal optmization.",
-                            "Possible faint anomalies in signal patterns noted.",
-                            "Unusual signal interference detected, disrupting initial scans."),
-                    ("Refining parameters.",
-                            "Alien signal detected, still weak and intermittent.",
-                            "Irregularities persist, obscuring further observations."),
-                    ("Begin signal analysis via FFT.",
-                            "Frequency spectrum dissected; unique spectral patterns identified.",
-                            "Analysis setback: FFT algorithm struggles to reveal spectral patterns in the elusive alien transmission."),
-                    ("Implementing PCA.",
-                            "PCA identified key components.",
-                            "PCA challenge: Critical components in the alien transmission elude identification, complicating prioritization."),
-                    ("Proritizing data for further analysis.",
-                            "Reliable reception of alien communications achieved.",
-                            "Parameters adjustment faltering: Alien signal weakens further, intermittent transmission disrupts analysis."),
-                ],
+                steps=
+                [
+                    [
+                        ("Commencing preliminary scans.", 
+                            "Slight irregularities in signal background observed.",
+                            "No unusual patterns detected. Recalibrating."),
+                        ("Begin signal optmization.",
+                                "Possible faint anomalies in signal patterns noted.",
+                                "Unusual signal interference detected, disrupting initial scans."),
+                        ("Refining parameters.",
+                                "Alien signal detected, still weak and intermittent.",
+                                "Irregularities persist, obscuring further observations."),
+                        ("Begin signal analysis via FFT.",
+                                "Frequency spectrum dissected; unique spectral patterns identified.",
+                                "Analysis setback: FFT algorithm struggles to reveal spectral patterns in the elusive alien transmission."),
+                        ("Implementing PCA.",
+                                "PCA identified key components.",
+                                "PCA challenge: Critical components in the alien transmission elude identification, complicating prioritization."),
+                        ("Proritizing data for further analysis.",
+                                "Reliable reception of alien communications achieved.",
+                                "Parameters adjustment faltering: Alien signal weakens further, intermittent transmission disrupts analysis."),
+                    ],
+                    [
+                        (
+                            "Initiating preliminary scans.",
+                            "Detecting minor signal background irregularities.",
+                            "No unusual patterns detected. Initiating recalibration."
+                        ),
+                        (
+                            "Commencing signal optimization.",
+                            "Noticing faint anomalies in signal patterns.",
+                            "Signal interference detected, disrupting initial scans."
+                        ),
+                        (
+                            "Fine-tuning signal parameters.",
+                            "Detecting intermittent alien signals, still weak.",
+                            "Persistent irregularities, hindering further observations."
+                        ),
+                        (
+                            "Starting signal analysis using FFT.",
+                            "Dissecting the frequency spectrum, identifying unique patterns.",
+                            "FFT analysis facing challenges in revealing spectral patterns in the elusive alien transmission."
+                        ),
+                        (
+                            "Applying PCA for analysis.",
+                            "Identifying critical components using PCA.",
+                            "PCA encountering difficulties: Critical components in the alien transmission remain elusive, complicating prioritization."
+                        ),
+                        (
+                            "Organizing data for in-depth analysis.",
+                            "Achieving stable reception of alien communications.",
+                            "Adjusting parameters with difficulties: Alien signal weakening, intermittent transmission disrupting analysis."
+                        )
+                    ],
+                    [
+                        (
+                            "Initiating preliminary scans.",
+                            "Noticing minor signal background irregularities.",
+                            "No unusual patterns detected. Starting recalibration."
+                        ),
+                        (
+                            "Commencing signal optimization.",
+                            "Observing faint anomalies in signal patterns.",
+                            "Signal interference detected, causing disruption in initial scans."
+                        ),
+                        (
+                            "Fine-tuning signal parameters.",
+                            "Detecting intermittent alien signals, still weak.",
+                            "Persistent irregularities observed, hindering further observations."
+                        ),
+                        (
+                            "Starting signal analysis using FFT.",
+                            "Dissecting the frequency spectrum, identifying unique patterns.",
+                            "FFT analysis encountering challenges in revealing spectral patterns in the elusive alien transmission."
+                        ),
+                        (
+                            "Applying PCA for analysis.",
+                            "Identifying key components using PCA.",
+                            "PCA facing challenges: Critical components in the alien transmission remain elusive, complicating prioritization."
+                        ),
+                        (
+                            "Organizing data for in-depth analysis.",
+                            "Achieving stable reception of alien communications.",
+                            "Struggling with parameter adjustments: Alien signal weakening, intermittent transmission disrupting analysis."
+                        )
+                    ],
+                ]
             )
         case "sigint_2":
             return Task(
@@ -96,6 +163,7 @@ def task_factory(task: str) -> Task:
                 bark_win="Valuable insights extracted from alien signal.",
                 bark_fail="Unexpected complexities in data hindered our ability to extract meaningful insights. Further analysis and refinement needed.",
                 steps=[
+                    [
                     ("Initiating data mining process with feature selection and dimensionality reduction.",
                         "Feature selection and dimensionality reduction successful; optimized dataset ready for analysis.",
                         "Challenges encountered during feature selection; refining techniques for improved data reduction."),
@@ -120,7 +188,8 @@ def task_factory(task: str) -> Task:
                     ("Data preprocessing and cleaning to ensure dataset quality and integrity.",
                         "Data preprocessing complete; clean and well-prepared dataset for mining.",
                         "Data preprocessing challenges encountered; refining techniques for improved data quality."),
-                    ]
+                    ],
+                ]
                 )
         #
         # SATCOM
@@ -135,7 +204,7 @@ def task_factory(task: str) -> Task:
                 losecon=4,
                 bark_win="Maintaining situational awareness through the integration of geospatial databases and real-time signal analysis.",
                 bark_fail="Unexpected interference disrupted ability to pinpoint the signal source. Further investigation required.",
-                steps = [
+                steps = [[
                     ("Initiating signal source tracking.",
                         "Tracking process successfully initiated.", 
                         "Failed to initiate tracking process."),
@@ -161,4 +230,5 @@ def task_factory(task: str) -> Task:
                         "Continuous monitoring ongoing with data fusion.", 
                         "Data fusion complexities; optimizing for seamless collaboration.")
                 ],
+                ]
             )

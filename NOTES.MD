@@ -1,3 +1,21 @@
+# Taks Chain 1
+<!-- EVENTs will generate TASKs, which can be completed by teams. -->
+<!-- Completing a TASK by generate more TASKs, or a new EVENT. -->
+SIGINT: Surveillance.
+>> New Event: Alien Signal Detected.
+    >> New Task - SIGINT: Identify Source \\get a location
+    >> New Task - SIGINT: Analyze Signal \\get info from it
+SIGINT: Signal Tracking
+--> New Task: Investigate Source
+
+# Sept 23 notes
+In MTG, combat is actually super simple: if power > toughness, the creature dies.
+In this game, the icon-combat is similarly simple. 
+The complexity/fun arises in all things surrounding combat.
+
+I should create a number of "stories" on which to base my missions
+Departments need "passive" tasks to do when there is "nothing" to do.
+    --> This does not really need to be planned out.
 # Sept 11 notes
 ## Task Engine
 There should be a list of tasks that is unknown to the player. 

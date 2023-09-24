@@ -29,7 +29,8 @@ def do_combat(team: Team, task: Task) -> Dict[str, Any]:
     losses = 0
     success = False
     for icon in task_icon_pattern:
-        print_good_combat_text(f"{task.steps[wins][0][:-1]}", end="", slow_print=True) # Don't print the final period.
+        choice = random.randint(0, len(task.steps) - 1)
+        print_good_combat_text(f"{task.steps[choice][wins][0][:-1]}", end="", slow_print=True) # Don't print the final period.
         # print a random number of periods between 1 and 4.
         for _ in range(random.randint(2, 6)):
             time.sleep(0.2)
@@ -39,11 +40,11 @@ def do_combat(team: Team, task: Task) -> Dict[str, Any]:
 
         if icon.name in team_icon_names:
             print_important_text("[+]", end="", slow_print=False)
-            print_good_combat_text(f" {task.steps[wins][1]}", slow_print=True)
+            print_good_combat_text(f" {task.steps[choice][wins][1]}", slow_print=True)
             wins += 1
         else:
             print_bad_text("[-]", end="", slow_print=False)
-            print_bad_combat_text(f" {task.steps[wins][2]}", slow_print=True)
+            print_bad_combat_text(f" {task.steps[choice][wins][2]}", slow_print=True)
             losses += 1
         
         if wins >= task.wincon:

@@ -107,11 +107,36 @@ Task wincons and losecons are also hidden until discovered.
 Eventually, I want the player to attempt tasks to see what sort of Icons they require.
 (This could done via RECON - a dummy team who simply runs the icons, fails them all, and gets put on cooldown)
 
-# MVP-06 -- Icon Information
+# MVP-XX -- Icon Information
 Display icon information for Tasks and Teams.
     These will be discoverable...
 
-# [COMPLETED] MVP-05 -- Juicy Combat Log
+# MVP-XX -- Event -> Task -> Team Flow
+The main screen will display an event, and the user can "click" on it.
+    While on screen, it will just a list of tasks attached to it.
+Clicking on a task will display a list of teams that can accomplish the task. 
+
+# MVP-XX -- Standy-By Tasks
+Some tasks can be queued up and completed, but they don't "fire" until a condition is met. 
+    Example: MEDTEC can be on STANDY_BY for injuries from combat. Once combat is done, the task completes instantly, instead of requiring a turn. 
+
+# MVP-07 -- Tasks Can Target Teams
+SATCOM new task: Real-Time Communications. When completed, it targets an XCOM team. 
+    This task is ON_GOING once it is done. It remains ON_GOING until the player stops it.
+    While the task is ON_GOING, the XCOM team gets a buff of some sort.
+
+# MVP-06 -- Comabt Upgrade
+Icons are spent during combat.
+A Team with only five A-icons can only match with A-icons five times.
+    Might need a special bark for when the icon comes up, but there is "nothing" left.
+    I also might need a bark class.
+
+# [COMPLETE] MVP-06 -- Bark Upgrade
+Support a more robust bark system.
+    Multiple variations of each bark.
+    Support for bark_spent, where a team fails to match an icon because they ran out.
+
+# [COMPLETE] MVP-05 -- Juicy Combat Log
 "Beginning this thing..." then roll if it succeeds or not. Then bark the win or the loss. J U I C Y
 
 # [COMPLETE] MVP-04 -- Task Queue and Execution
