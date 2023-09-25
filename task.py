@@ -11,12 +11,19 @@ class TaskState(Enum):
     UNSUCCESSFUL = 4
     CHOSEN = 5
     QUEUED = 6
+    ONGOING = 7
+
+
+class TaskSubcategory(Enum):
+    ACTIVE = 1 # Needs to target an event.
+    SUPPORT = 2 # Needs to target a team.
+    PASSIVE = 3 # Generates an event.
 
 
 class Task:
     task_counter = 0
 
-    def __init__(self, name: str, description: str, category: str, icons: Dict[Icon, int], wincon: int, losecon: int, steps: List[List[Tuple[str, str, str]]] = [("", "", "")], bark_win: str = "", bark_fail: str = "", win_tasks: List[str] = [], lose_tasks: List[str] = []):
+    def __init__(self, name: str, description: str, category: str, icons: Dict[Icon, int], wincon: int, losecon: int , subcategory: TaskSubcategory, steps: List[List[Tuple[str, str, str]]] = [("", "", "")], bark_win: str = "", bark_fail: str = "", win_tasks: List[str] = [], lose_tasks: List[str] = []):
         self.name = name
         self.description = description # not really a description, more like the opening bark.
         self.category = category
@@ -28,6 +35,7 @@ class Task:
         self.steps = steps # (step, success, failure) -- grab a random list from within, and then get the step.
         self.win_tasks = win_tasks
         self.lose_tasks = lose_tasks
+        self.subcategory = subcategory
 
         self.state: TaskState = TaskState.AVAILABLE
         self.id: int = Task.task_counter
@@ -51,6 +59,7 @@ def task_factory(task: str) -> Task:
                 },
                 wincon=6,
                 losecon=4,
+                subcategory=TaskSubcategory.ACTIVE,
                 
             )
         #
@@ -68,6 +77,7 @@ def task_factory(task: str) -> Task:
                 },
                 wincon=6,
                 losecon=4,
+                subcategory=TaskSubcategory.PASSIVE,
                 win_tasks=["sigint_2", "satcom_1"],
                 bark_win="Extraterrestrial signal detection and analysis successful.",
                 bark_fail="Reliability compromised: alien signal is lost.",
@@ -169,6 +179,7 @@ def task_factory(task: str) -> Task:
                 },
                 wincon=8,
                 losecon=4,
+                subcategory=TaskSubcategory.ACTIVE,
                 bark_win="Valuable insights extracted from alien signal.",
                 bark_fail="Unexpected complexities in data hindered our ability to extract meaningful insights. Further analysis and refinement needed.",
                 steps=[
@@ -215,6 +226,7 @@ def task_factory(task: str) -> Task:
                 },
                 wincon=6,
                 losecon=4,
+                subcategory=TaskSubcategory.ACTIVE,
                 bark_win="Maintaining situational awareness through the integration of geospatial databases and real-time signal analysis.",
                 bark_fail="Unexpected interference disrupted ability to pinpoint the signal source. Further investigation required.",
                 steps = [[
@@ -242,6 +254,37 @@ def task_factory(task: str) -> Task:
                     ("Maintaining continuous monitoring with data fusion.", 
                         "Continuous monitoring ongoing with data fusion.", 
                         "Data fusion complexities; optimizing for seamless collaboration.")
+                ],
+                ]
+            )
+        case "real_time_comms":
+            return Task(
+                name="Real-Time Communications",
+                description="Establishing real-time communications with the alien signal source.",
+                category="satcom",
+                subcategory="support",
+                icons={
+                    icon_factory("communication"): 6,
+                },
+                wincon=4,
+                win_tasks=["real_time_comms"],
+                losecon=99,
+                subcategory=TaskSubcategory.SUPPORT,
+                bark_win="Real-time communications established with the alien signal source.",
+                bark_fail="Unexpected interference disrupted ability to establish real-time communications. Further investigation required.",
+                steps = [[
+                    ("Initiating real-time communications.",
+                        "Real-time communications successfully initiated.",
+                        "."),
+                    ("Initiating real-time communications. 2",
+                        "Real-time communications successfully initiated.",
+                        "."),
+                    ("Initiating real-time communications. 3",
+                        "Real-time communications successfully initiated.",
+                        "."),
+                    ("Initiating real-time communications. 4",
+                        "Real-time communications successfully initiated.",
+                        "."),
                 ],
                 ]
             )

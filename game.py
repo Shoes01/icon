@@ -25,8 +25,10 @@ class Game:
         self.add_team(team_factory("sigint"))
         self.add_team(team_factory("sigint"))
         self.add_team(team_factory("satcom"))
+        self.add_team(team_factory("xcom"))
         self.alerts: Dict[str, int] = {"sigint": 0, "satcom": 0, "xcom": 0}
 
+        self.tasks.append(task_factory("real_time_comms"))
 
     def push_state(self, state: BaseState):
         self.state_stack.append(state)

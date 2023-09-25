@@ -1,5 +1,6 @@
 # MVP-XX -- Varied Barks
 Have more than a few barks per step
+Move barks into a .csv file for better maintenance
 
 # MVP-XX -- Different Wincons for Different Icons
 Getting 6 wins before 4 losses : already in
@@ -120,16 +121,45 @@ Clicking on a task will display a list of teams that can accomplish the task.
 Some tasks can be queued up and completed, but they don't "fire" until a condition is met. 
     Example: MEDTEC can be on STANDY_BY for injuries from combat. Once combat is done, the task completes instantly, instead of requiring a turn. 
 
-# MVP-07 -- Tasks Can Target Teams
-SATCOM new task: Real-Time Communications. When completed, it targets an XCOM team. 
-    This task is ON_GOING once it is done. It remains ON_GOING until the player stops it.
-    While the task is ON_GOING, the XCOM team gets a buff of some sort.
-
-# MVP-06a -- Combat Upgrade II
+# MVP-XX -- Combat Upgrade II
 The player needs to be able to decide how many icons of each type are on a team.
 Or at least reconfigure a team to a pre-set number of icons.
 
-# [COMPLETE] MVP-06 -- Combat Upgrade
+# MVP-XX -- Active Tasks
+Need EVENTs that active tasks can target when they are initiated.
+
+# [WIP] MVP-08 -- Support Tasks
+Some tasks target teams and grants them bonuses.
+These tasks are usually ONGOING. 
+
+[x] Subcategories : need to add subcats to all existing tasks.
+[ ] Targeting : need to allow support tasks to target a team.
+    [ ] Need to redesign UI to better use states, like a "choose a team" state.
+[ ] Targeting : need to allow passive tasks to start without targeting.
+[ ] ONGOING tasks don't end.
+[ ] SUPPORT tasks grant their bonuses to the targeted team.
+[?] Consider allowing the UI to work in both directions. Choosing a team -> chooesing a task, and choosing a task -> choosing a team.
+    Perhaps a button to switch the order. Display: teams, tasks, events.
+        Maybe this can be done at the game.py input handler, and the state is just popped and appended with the new display. -- or the self.options is changed from under it.
+
+--> When a task is chosen, the player should choose a target from a list.
+    --> Tasks will need `subcategory`s. 
+--> Some tasks, when completed, move to ONGOING. The benefit they impart persists until the player interrupts the task.
+
+__Issues__
+Some tasks will need to always be shown, and bypass the alert system. (Maybe it should be removed..)
+Passive and Support tasks should always be shown. Completing them doesn't remove them.
+What happens with combat of a support task? Just a few barks and that's it?
+I may need to redesign the UI...
+    I could make better use of states. None of this "menu one" "menu two" stuff. Click a task --> event selection state.
+
+__Example__
+SATCOM new task: Real-Time Communications. When completed, it targets an XCOM team. 
+    This task is ONGOING once it is done. It remains ON_GOING until the player stops it.
+    While the task is ONGOING, the XCOM team gets a buff of some sort.
+        Perhaps they are granted a few icons during combat.
+
+# [COMPLETE] MVP-07 -- Combat Upgrade
 Icons are spent during combat.
 A Team with only five A-icons can only match with A-icons five times.
     Might need a special bark for when the icon comes up, but there is "nothing" left.

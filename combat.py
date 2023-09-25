@@ -4,7 +4,7 @@ import os
 import time
 import random
 
-from debug_options import DEBUG_ALWAYS_PRINT_FAST
+from debug_options import DEBUG_ALWAYS_PRINT_FAST, DEBUG_ALWAYS_SHOW_VERBOSE_COMBAT
 from icon import Icon
 from task import Task, TaskState
 from team import Team, TeamState
@@ -35,7 +35,7 @@ def do_combat(team: Team, task: Task) -> Dict[str, Any]:
     losses = 0
     success = False
     for icon in task_icon_pattern:
-        print_bad_text(f"LOG:{team_icon_names=} :: using {icon.name=}")
+        if DEBUG_ALWAYS_SHOW_VERBOSE_COMBAT: print_bad_text(f"{team_icon_names=} :: using {icon.name=}")
         choice = random.randint(0, len(task.steps) - 1)
         print_good_combat_text(f"{task.steps[choice][wins][0][:-1]}", end="", slow_print=True) # Don't print the final period.
         # print a random number of periods between 1 and 4.
