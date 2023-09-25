@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 from enum import Enum
 
 from icon import Icon, icon_factory
@@ -16,7 +16,7 @@ class TaskState(Enum):
 class Task:
     task_counter = 0
 
-    def __init__(self, name: str, description: str, category: str, icons: List[Icon], wincon: int, losecon: int, steps: List[List[Tuple[str, str, str]]] = [("", "", "")], bark_win: str = "", bark_fail: str = "", win_tasks: List[str] = [], lose_tasks: List[str] = []):
+    def __init__(self, name: str, description: str, category: str, icons: Dict[Icon, int], wincon: int, losecon: int, steps: List[List[Tuple[str, str, str]]] = [("", "", "")], bark_win: str = "", bark_fail: str = "", win_tasks: List[str] = [], lose_tasks: List[str] = []):
         self.name = name
         self.description = description # not really a description, more like the opening bark.
         self.category = category
@@ -45,7 +45,10 @@ def task_factory(task: str) -> Task:
                 name="XCOM Task",
                 description="This is a EXTRATERRESTRIALS COMMAND task.",
                 category="xcom",
-                icons=[icon_factory("attack")],
+                icons={
+                    icon_factory("attack"): 5,
+                    icon_factory("defense"): 5,
+                },
                 wincon=6,
                 losecon=4,
                 
@@ -58,7 +61,11 @@ def task_factory(task: str) -> Task:
                 name="Extraterrestrial Signal Detection and Analysis", 
                 description="Scanning frequency bands for unusual signal patterns...", 
                 category="sigint",
-                icons=[icon_factory("analysis"), icon_factory("analysis"), icon_factory("observation")],
+                icons={
+                    icon_factory("observation"): 2,
+                    icon_factory("analysis"): 4,
+                    icon_factory("deception"): 4,
+                },
                 wincon=6,
                 losecon=4,
                 win_tasks=["sigint_2", "satcom_1"],
@@ -157,7 +164,9 @@ def task_factory(task: str) -> Task:
                 name="Data Mining",
                 description="Mining data from alien signal...",
                 category="sigint",
-                icons=[icon_factory("observation")],
+                icons={
+                    [icon_factory("observation")]: 6,
+                },
                 wincon=8,
                 losecon=4,
                 bark_win="Valuable insights extracted from alien signal.",
@@ -199,7 +208,11 @@ def task_factory(task: str) -> Task:
                 name="Signal Source Tracking",
                 description="Positioning satellite arrays for real-time source tracking.",
                 category="satcom",
-                icons=[icon_factory("observation"), icon_factory("communication"), icon_factory("jamming")],
+                icons={
+                    icon_factory("communication"): 6,
+                    icon_factory("jamming"): 2,
+                    icon_factory("observation"): 2,
+                },
                 wincon=6,
                 losecon=4,
                 bark_win="Maintaining situational awareness through the integration of geospatial databases and real-time signal analysis.",

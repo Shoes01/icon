@@ -125,11 +125,27 @@ SATCOM new task: Real-Time Communications. When completed, it targets an XCOM te
     This task is ON_GOING once it is done. It remains ON_GOING until the player stops it.
     While the task is ON_GOING, the XCOM team gets a buff of some sort.
 
-# MVP-06 -- Comabt Upgrade
+# MVP-06a -- Combat Upgrade II
+The player needs to be able to decide how many icons of each type are on a team.
+Or at least reconfigure a team to a pre-set number of icons.
+
+# [COMPLETE] MVP-06 -- Combat Upgrade
 Icons are spent during combat.
 A Team with only five A-icons can only match with A-icons five times.
     Might need a special bark for when the icon comes up, but there is "nothing" left.
     I also might need a bark class.
+
+For now, get the icon-dict from the task.
+Generate a list. 
+Get the icon-dict for the team.
+Do combat normally, but deincrement the team's dict with each match.
+If there is nothing left, fail match.
+
+How does one win?
+1. Getting X matches before Y mismatches -- old way
+2. Getting X matches before Y mismatches, but your icons are spent with every match -- current
+3. Reducing enemy icons to 0
+    > problem: if the enemy has icons you do not, then you can't reduce them. I think this makes it deterministic... 
 
 # [COMPLETE] MVP-06 -- Bark Upgrade
 Support a more robust bark system.

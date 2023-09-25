@@ -4,14 +4,20 @@ import os
 import time
 import random
 
+from debug_options import DEBUG_ALWAYS_PRINT_FAST
+from icon import Icon
 from task import Task, TaskState
 from team import Team, TeamState
 from print_color import print_regular_text, print_text_input, print_good_text, print_bad_text, print_important_text, print_good_combat_text, print_bad_combat_text
 
 
 def do_combat(team: Team, task: Task) -> Dict[str, Any]:
-    team_icon_names: List[str] = [icon.name for icon in team.icons]
-    task_icon_pattern: List[str] = [random.choice(task.icons) for _ in range(20)]
+    team_icons: Dict[Icon, int] = team.icons
+    team_icon_names: Dict[str, int] = {icon.name: count for icon, count in team_icons.items()}
+
+    task_icons: Dict[Icon, int] = task.icons
+    task_icon_pattern: List[Icon] = [icon for icon, count in task_icons.items() for _ in range(count)]
+    random.shuffle(task_icon_pattern)  
 
     #print_regular_text(f"{team.name.title()} has the following icons: {team_icon_names}.")
     #print_regular_text(f"{task.name.title()} has the following pattern: {[icon.name for icon in task.icons]}.")
@@ -29,18 +35,21 @@ def do_combat(team: Team, task: Task) -> Dict[str, Any]:
     losses = 0
     success = False
     for icon in task_icon_pattern:
+        print_bad_text(f"LOG:{team_icon_names=} :: using {icon.name=}")
         choice = random.randint(0, len(task.steps) - 1)
         print_good_combat_text(f"{task.steps[choice][wins][0][:-1]}", end="", slow_print=True) # Don't print the final period.
         # print a random number of periods between 1 and 4.
-        for _ in range(random.randint(2, 6)):
+        if not DEBUG_ALWAYS_PRINT_FAST: 
+            for _ in range(random.randint(2, 6)):
+                time.sleep(0.2)
+                print(".", end="")
             time.sleep(0.2)
-            print(".", end="")
-        time.sleep(0.2)
-        print(" ", end="")
+            print(" ", end="")
 
-        if icon.name in team_icon_names:
+        if icon.name in team_icon_names and team_icon_names[icon.name] > 0:
             print_important_text("[+]", end="", slow_print=False)
             print_good_combat_text(f" {task.steps[choice][wins][1]}", slow_print=True)
+            team_icon_names[icon.name] -= 1
             wins += 1
         else:
             print_bad_text("[-]", end="", slow_print=False)
