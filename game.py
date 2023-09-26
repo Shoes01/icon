@@ -7,6 +7,9 @@ from states.main_screen import MainScreen
 from states.satcom_screen import SatcomScreen
 from states.sigint_screen import SigintScreen
 from states.task_queue_screen import TaskQueueScreen
+from states.team_picker_screen import TeamPickerScreen
+from states.task_picker_screen import TaskPickerScreen
+from event import Event
 from task import Task, task_factory, TaskState
 from team import Team, team_factory, TeamState
 from combat import do_combat
@@ -21,6 +24,7 @@ class Game:
         self.turn_count: int = 0
         self.tasks: List[Task] = []
         self.teams: List[Team] = []
+        self.events: List[Event] = []
 
         self.add_team(team_factory("sigint"))
         self.add_team(team_factory("sigint"))
@@ -58,11 +62,9 @@ class Game:
             print("\n")
 
             user_input = self.handle_input(user_input)
-            if user_input != "":
-                user_input = self.state_stack[-1].sanitize_input(user_input)
-                if user_input != -1:
-                    result = self.state_stack[-1].handle_input(user_input)
-                    if result: self.update(result)
+            result = self.state_stack[-1].handle_input(user_input)
+            if result: 
+                self.update(result)
 
 
     def handle_input(self, user_input) -> str:
@@ -125,12 +127,19 @@ class Game:
                 case "sigint":
                     tasks: List[Task] = self.get_tasks("sigint")
                     teams: List[Team] = self.get_teams("sigint")
-                    self.state_stack.append(SigintScreen(tasks=tasks, teams=teams))
+                    self.state_stack.append(SigintScreen(tasks=tasks, teams=teams, events=[]))
                 case "task_queue":
                     queued_tasks = [task for task in self.tasks if task.state == TaskState.QUEUED]
                     self.state_stack.append(TaskQueueScreen(tasks=queued_tasks, teams=self.teams))
                 case "task_assigned":
-                    self.pop_state()             
+                    self.pop_state()
+                case "all_done":
+                    self.pop_state()
+                    self.pop_state() # This takes us all the way back to the main screen.
+                case "need a team for this task":
+                    self.state_stack.append(TeamPickerScreen(task=value, teams=self.teams))
+                case "need a task for this team":
+                    self.state_stack.append(TaskPickerScreen(team=value, tasks=self.tasks))
     
     
     def add_team(self, team: Team):

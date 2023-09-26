@@ -262,7 +262,6 @@ def task_factory(task: str) -> Task:
                 name="Real-Time Communications",
                 description="Establishing real-time communications with the alien signal source.",
                 category="satcom",
-                subcategory="support",
                 icons={
                     icon_factory("communication"): 6,
                 },

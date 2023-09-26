@@ -34,14 +34,16 @@ class TaskQueueScreen(BaseState):
                 print_regular_text(f"{i}. {task.name} - {task.category.upper()} - {assigned_team.name}[{assigned_team.id}]")
     
     def handle_input(self, user_input: int) -> Dict[str, Any]:
-        task_to_remove = self.tasks[user_input-1]
-        print(f"Task to remove: {task_to_remove.name}")
-        print(f"Task's team-assigned's ID: {task_to_remove.assigned_team_id}")
-        team_to_remove = None
-        for team in self.teams:
-            if team.id == task_to_remove.assigned_team_id:
-                team_to_remove = team
-                task_to_remove.state = TaskState.AVAILABLE
-                team_to_remove.state = TeamState.AVAILABLE
-                return {"make_task_available": True}
-        return {"failed_to_remove_task": False}
+        if user_input.isdigit():
+            input_as_int = int(user_input)
+            if input_as_int > 0 and input_as_int <= len(self.menu_options):
+                task_to_remove = self.tasks[input_as_int-1]
+                team_to_remove = None
+                for team in self.teams:
+                    if team.id == task_to_remove.assigned_team_id:
+                        team_to_remove = team
+                        task_to_remove.state = TaskState.AVAILABLE
+                        team_to_remove.state = TeamState.AVAILABLE
+                        return {"make_task_available": True}
+                return {"failed_to_remove_task": False}
+        return {"invalid input": False}

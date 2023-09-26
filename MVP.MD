@@ -133,14 +133,15 @@ Some tasks target teams and grants them bonuses.
 These tasks are usually ONGOING. 
 
 [x] Subcategories : need to add subcats to all existing tasks.
+[-] Consider allowing the UI to work in both directions. Choosing a team -> choosing a task, and choosing a task -> choosing a team.
+    Need to update SATCOM and XCOM with this new code.
+[ ] ACTIVE tasks target an Event. PASSIVE tasks generate an Event. SUPPORT tasks target a Team.
 [ ] Targeting : need to allow support tasks to target a team.
     [ ] Need to redesign UI to better use states, like a "choose a team" state.
 [ ] Targeting : need to allow passive tasks to start without targeting.
 [ ] ONGOING tasks don't end.
 [ ] SUPPORT tasks grant their bonuses to the targeted team.
-[?] Consider allowing the UI to work in both directions. Choosing a team -> chooesing a task, and choosing a task -> choosing a team.
-    Perhaps a button to switch the order. Display: teams, tasks, events.
-        Maybe this can be done at the game.py input handler, and the state is just popped and appended with the new display. -- or the self.options is changed from under it.
+
 
 --> When a task is chosen, the player should choose a target from a list.
     --> Tasks will need `subcategory`s. 

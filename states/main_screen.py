@@ -87,14 +87,14 @@ class MainScreen(BaseState):
 
     def handle_input(self, user_input: int):
         match user_input:
-            case 1:
+            case "1":
                 return {"sigint": True}
-            case 2:
+            case "2":
                 return {"satcom": True}
-            case 3:
+            case "3":
                 return {"xcom": True}
-            case 4:
+            case "4":
                 return {"task_queue": True}
-            case 0:
+            case "0":
                 self.alerts_are_read = False
                 return {"end_turn": True}

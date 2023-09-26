@@ -28,7 +28,7 @@ class RootMenu(BaseState):
 
     def handle_input(self, user_input: int):
         match user_input:
-            case 1:
+            case "1":
                 return {"new_game": True}
-            case 2:
+            case "2":
                 return {"quit", True}
