@@ -1,7 +1,7 @@
 from typing import List, Dict, Any
 import os
 
-from base_state import BaseState
+from states.base_state import BaseState
 from states.root_menu import RootMenu
 from states.main_screen import MainScreen
 from states.satcom_screen import SatcomScreen
@@ -123,7 +123,7 @@ class Game:
                 case "satcom":
                     tasks: List[Task] = self.get_tasks("satcom")
                     teams: List[Team] = self.get_teams("satcom")
-                    self.state_stack.append(SatcomScreen(tasks=tasks, teams=teams))                    
+                    self.state_stack.append(SatcomScreen(tasks=tasks, teams=teams, events=[]))
                 case "sigint":
                     tasks: List[Task] = self.get_tasks("sigint")
                     teams: List[Team] = self.get_teams("sigint")

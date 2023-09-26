@@ -1,6 +1,6 @@
 from typing import Any, Dict, List
 
-from base_state import BaseState
+from states.base_state import BaseState
 from task import Task, TaskState
 from team import Team, TeamState
 from print_color import print_regular_text, print_important_text

@@ -1,4 +1,4 @@
-from base_state import BaseState
+from states.base_state import BaseState
 from states.main_screen import MainScreen
 from print_color import print_VIP_text, print_regular_text
 
