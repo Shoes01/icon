@@ -9,8 +9,9 @@ from states.sigint_screen import SigintScreen
 from states.task_queue_screen import TaskQueueScreen
 from states.team_picker_screen import TeamPickerScreen
 from states.task_picker_screen import TaskPickerScreen
+from states.team_targeter_screen import TeamTargeterScreen
 from event import Event
-from task import Task, task_factory, TaskState
+from task import Task, task_factory, TaskState, TaskSubcategory
 from team import Team, team_factory, TeamState
 from combat import do_combat
 from print_color import print_regular_text, print_text_input, print_important_text
@@ -88,16 +89,15 @@ class Game:
 
     def end_turn(self):
         # Prepare combat.
-        for task in self.tasks:
-            if task.state == TaskState.QUEUED:
-                for team in self.teams:
-                    if task.assigned_team_id == team.id:
-                        do_combat(team, task)
+        for team in self.teams:
+            for task in self.tasks:
+                if team.working_on_task == task.id and team.state != TeamState.SUPPORTING:
+                    do_combat(team, task, self.teams, self.tasks)
         # Iterate cooldown.
         for team in self.teams:
-            if team.cooldown > 0:
+            if team.cooldown > 0 and team.state != TeamState.SUPPORTING:
                 team.cooldown -= 1
-            if team.cooldown == 0:
+            if team.cooldown == 0 and team.state == TeamState.COOLDOWN:
                 team.state = TeamState.AVAILABLE
             
         print_important_text(f"Turn {self.turn_count} complete.\n")
@@ -129,19 +129,29 @@ class Game:
                     teams: List[Team] = self.get_teams("sigint")
                     self.state_stack.append(SigintScreen(tasks=tasks, teams=teams, events=[]))
                 case "task_queue":
-                    queued_tasks = [task for task in self.tasks if task.state == TaskState.QUEUED]
-                    self.state_stack.append(TaskQueueScreen(tasks=queued_tasks, teams=self.teams))
+                    self.state_stack.append(TaskQueueScreen(tasks=self.tasks, teams=self.teams))
                 case "task_assigned":
                     self.pop_state()
                 case "all_done":
                     self.pop_state()
                     self.pop_state() # This takes us all the way back to the main screen.
+                case "all_done + 1":
+                    self.pop_state()
+                    self.pop_state()
+                    self.pop_state() # This takes us all the way back to the main screen.
                 case "need a team for this task":
-                    self.state_stack.append(TeamPickerScreen(task=value, teams=self.teams))
+                    # TODO: What is in this value? It seems to be a single task.
+                    task: Task = value
+                    self.state_stack.append(TeamPickerScreen(task=task, teams=self.teams))
                 case "need a task for this team":
-                    self.state_stack.append(TaskPickerScreen(team=value, tasks=self.tasks))
-    
-    
+                    team: Team = value
+                    self.state_stack.append(TaskPickerScreen(team=team, tasks=self.tasks))
+                case "need to pick team a to support":
+                    task: Task = value[0]
+                    team: Team = value[1]
+                    self.state_stack.append(TeamTargeterScreen(chosen_team=team, chosen_task=task, teams=self.teams))
+
+
     def add_team(self, team: Team):
         self.teams.append(team)
     
@@ -178,17 +188,22 @@ class Game:
             self.add_task(task_factory("satcom_1"))
         
         for task in self.tasks:
-            if task.state == TaskState.SUCCESSFUL:
-                for task_codename in task.win_tasks:
-                    self.add_task(task_factory(task_codename))
-            
             match task.state:
                 case TaskState.SUCCESSFUL:
-                    self.remove_task(task)
+                    for task_codename in task.win_tasks:
+                        self.add_task(task_factory(task_codename))
+                    if task.subcategory != TaskSubcategory.SUPPORT:
+                        self.remove_task(task)
+                    else:
+                        task.state = TaskState.AVAILABLE
                 case TaskState.UNSUCCESSFUL:
                     task.state = TaskState.AVAILABLE
+                    # eventually add a lose task
                 case TaskState.QUEUED:
                     print(f"Why is this task still queued? {task.name}")
+                case TaskState.ONGOING:
+                    # Do not change the state of ongoing tasks.
+                    pass
             
 
             

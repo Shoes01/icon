@@ -60,12 +60,11 @@ class MainScreen(BaseState):
                 teams_working = 0
                 for team in self.teams:
                     if team.category == option.lower(): # TODO: This is lazy, too.
-                        match team.state:
-                            case TeamState.AVAILABLE:
+                        if team.state == TeamState.AVAILABLE:
                                 teams_available += 1
-                            case TeamState.COOLDOWN:
+                        elif team.state == TeamState.COOLDOWN:
                                 teams_on_cooldown += 1
-                            case TeamState.WORKING:
+                        elif team.state == TeamState.WORKING or team.state == TeamState.SUPPORTING:
                                 teams_working += 1
                 s3 = "" if teams_available == 1 else "s"
                 s4 = "" if teams_on_cooldown == 1 else "s"
@@ -73,12 +72,12 @@ class MainScreen(BaseState):
                 #text += f"\n  > {tasks_available} task{s1} available, {tasks_queued} task{s2} queued."
                 #text += f"\n  > {teams_available} team{s3} available, {teams_on_cooldown} team{s4} on cooldown.\n"
             elif option.lower() == "task queue":
-                tasks_in_queue = 0
-                for task in self.tasks:
-                    if task.state == TaskState.QUEUED:
-                        tasks_in_queue += 1
-                s = "" if tasks_in_queue == 1 else "s"
-                text += f" || {tasks_in_queue} task{s} in queue.\n"
+                teams_in_queue = 0
+                for team in self.teams:
+                    if team.working_on_task >= 0:
+                        teams_in_queue += 1
+                s = "" if teams_in_queue == 1 else "s"
+                text += f" || {teams_in_queue} team{s} in queue or ongoing.\n"
         text += "\n0. End Turn"
         print_regular_text(text)
 

@@ -23,7 +23,7 @@ class TaskSubcategory(Enum):
 class Task:
     task_counter = 0
 
-    def __init__(self, name: str, description: str, category: str, icons: Dict[Icon, int], wincon: int, losecon: int , subcategory: TaskSubcategory, steps: List[List[Tuple[str, str, str]]] = [("", "", "")], bark_win: str = "", bark_fail: str = "", win_tasks: List[str] = [], lose_tasks: List[str] = []):
+    def __init__(self, name: str, description: str, category: str, icons: Dict[Icon, int], wincon: int, losecon: int , subcategory: TaskSubcategory, steps: List[List[Tuple[str, str, str]]] = [("", "", "")], bark_win: str = "", bark_fail: str = "", win_tasks: List[str] = [], lose_tasks: List[str] = [], supporting_icons: Dict[Icon, int] = None):
         self.name = name
         self.description = description # not really a description, more like the opening bark.
         self.category = category
@@ -36,11 +36,11 @@ class Task:
         self.win_tasks = win_tasks
         self.lose_tasks = lose_tasks
         self.subcategory = subcategory
+        self.supporting_icons = supporting_icons
 
         self.state: TaskState = TaskState.AVAILABLE
         self.id: int = Task.task_counter
         Task.task_counter += 1
-        self.assigned_team_id: int = -1
 
 
 def task_factory(task: str) -> Task:
@@ -60,7 +60,6 @@ def task_factory(task: str) -> Task:
                 wincon=6,
                 losecon=4,
                 subcategory=TaskSubcategory.ACTIVE,
-                
             )
         #
         # SIGINT
@@ -266,9 +265,12 @@ def task_factory(task: str) -> Task:
                     icon_factory("communication"): 6,
                 },
                 wincon=4,
-                win_tasks=["real_time_comms"],
                 losecon=99,
                 subcategory=TaskSubcategory.SUPPORT,
+                supporting_icons={
+                    icon_factory("communication"): 6,
+                    icon_factory("jamming"): 2,
+                },
                 bark_win="Real-time communications established with the alien signal source.",
                 bark_fail="Unexpected interference disrupted ability to establish real-time communications. Further investigation required.",
                 steps = [[

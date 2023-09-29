@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 from enum import Enum
 
 from icon import Icon, icon_factory
@@ -9,7 +9,7 @@ class TeamState(Enum):
     WORKING = 2
     COOLDOWN = 3
     CHOSEN = 4
-
+    SUPPORTING = 5
 
 class Team:
     team_counter = 0
@@ -19,10 +19,15 @@ class Team:
         self.category = category
         self.icons = icons
 
+        self.working_on_task: int = -1 # ID of the task this team is completing.
+        self.supporting_team: int = -1 # ID of the team this team is supporting.
+        self.supported_by_tasks: List[int] = [] # IDs of the tasks this team is being supported by.
         self.state = TeamState.AVAILABLE
         self.cooldown = 0
         self.id = Team.team_counter
         Team.team_counter += 1
+
+        self.name += "_" + str(self.id)
 
 
 def team_factory(team: str) -> Team:

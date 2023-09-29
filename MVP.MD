@@ -1,3 +1,14 @@
+# MVP-XX -- Queueing Tasks
+Icon-combat is like when creatures in MTG exchange damage. It is not _the_ battle.
+Likewise, The Battle here is not just one icon-combat. 
+It is intercepting a UFO, securing a corridor to the site, securing the site itself, setting up command quarters nearby, etc etc.
+Each of these "steps" in the battle would have their own forks and obstacles, their own choices to make.
+Each time the player "makes a choice", it wastes a turn. 
+"Do task" -> wait for new task -> "Do task"
+If the player queues tasks, then
+"Do task 1/2" -> "Do task 2/2"
+But it is riskier, because task 1 may have gone poorly.
+
 # MVP-XX -- Varied Barks
 Have more than a few barks per step
 Move barks into a .csv file for better maintenance
@@ -5,6 +16,7 @@ Move barks into a .csv file for better maintenance
 # MVP-XX -- Different Wincons for Different Icons
 Getting 6 wins before 4 losses : already in
 Getting X in a row before 4 losses : hmm
+Getting X matches more than failures (tug-of-war)
 what's more fun?
 This could mean that some icons would mix better together?
 
@@ -18,6 +30,7 @@ To create a new team, the player needs the required equipment.
 Research or Salvage would allow the player to collect and make equipment. 
     Research gives new icons so that salvage can get more out of wreckage.
     Salvage actually gets things out of wreckage sites.
+How is equipment moved around? Is it permanently tied to a team? 
 
 # MVP-XX -- HR and Hiring Teams
 New department: HR. 
@@ -126,33 +139,50 @@ The player needs to be able to decide how many icons of each type are on a team.
 Or at least reconfigure a team to a pre-set number of icons.
 
 # MVP-XX -- Active Tasks
-Need EVENTs that active tasks can target when they are initiated.
+<!-- 
+Are events needed? 
+Maybe the tasks are "tied" to events, but the events are only in name. If there are several UFOs on the ground, then the XCOM team would simply have UFO_TASK_1 and UFO_TASK_2, instead of UFO_TASK and then being able to target two events.
+But Events might be nice narratively... 
+-->
+Active tasks target EVENTs.
 
-# [WIP] MVP-08 -- Support Tasks
+Need Events.
+    Created by passive tasks.
+    Targeted by active tasks.
+Need to add Events to the display switcher.
+Need to remove Events once they are done.
+    --> Events are done if all related tasks are completed.
+    --> The player may dismiss events. (maybe in the future only)
+[?] How are tasks added due to events?
+        Are they added once and that's it? Then failing the task generates the same task again? 
+        Are the tasks tied to the Event, and tracked somehow? 
+
+# MVP-XX -- Support Tasks II
+Issue: teams need to perform the task every turn to maintain support....
+    This is because I want the task to always be AVAILABLE,
+     which means the combat engine thinks it's always ready to fight.
+
+# [COMPLETE] MVP-08 -- Support Tasks
 Some tasks target teams and grants them bonuses.
 These tasks are usually ONGOING. 
 
 [x] Subcategories : need to add subcats to all existing tasks.
-[-] Consider allowing the UI to work in both directions. Choosing a team -> choosing a task, and choosing a task -> choosing a team.
-    Need to update SATCOM and XCOM with this new code.
-[ ] ACTIVE tasks target an Event. PASSIVE tasks generate an Event. SUPPORT tasks target a Team.
-[ ] Targeting : need to allow support tasks to target a team.
-    [ ] Need to redesign UI to better use states, like a "choose a team" state.
-[ ] Targeting : need to allow passive tasks to start without targeting.
-[ ] ONGOING tasks don't end.
-[ ] SUPPORT tasks grant their bonuses to the targeted team.
-
-
---> When a task is chosen, the player should choose a target from a list.
-    --> Tasks will need `subcategory`s. 
---> Some tasks, when completed, move to ONGOING. The benefit they impart persists until the player interrupts the task.
-
-__Issues__
-Some tasks will need to always be shown, and bypass the alert system. (Maybe it should be removed..)
-Passive and Support tasks should always be shown. Completing them doesn't remove them.
-What happens with combat of a support task? Just a few barks and that's it?
-I may need to redesign the UI...
-    I could make better use of states. None of this "menu one" "menu two" stuff. Click a task --> event selection state.
+[x] Consider allowing the UI to work in both directions. Choosing a team -> choosing a task, and choosing a task -> choosing a team.
+[x] SUPPORT tasks target a team. 
+    Pick task/team --> choose team/task --> choose team that it targets
+    (ACTIVE tasks will use this format too, but target an event at the end)
+    [ ] Tasks can be done by anyone, and can target any team/event (if support/active). Yes, there will be a lot of bad decisions. XCOM won't do well with SIGINT tasks...
+            (if code is already sorting by category, then keep that)
+[x] Teams who are being supported don't really need to know. They will gain the icons during combat. They will hold the IDs of the tasks that are supporting them.
+    [x] Task is still QUEUED until completed normally
+    [x] If the task fails (the team did not have the required icons), it is removed from the team.
+    [x] If successful, it becomes ONGOING. 
+    [x] It will appear in the task queue or something... for the player to cancel. 
+        [x] When cancelled, it clears all the support-related IDs from the task and the supported team.
+[?] What kind of support is the team getting? 
+    > They can be granted the task's icons
+    > They can be granted the team's icons
+    [>] They can be granted a set of icons specific to support
 
 __Example__
 SATCOM new task: Real-Time Communications. When completed, it targets an XCOM team. 

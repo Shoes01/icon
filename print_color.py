@@ -162,6 +162,8 @@ def print_two_columns(col_teams: List[Task], col_tasks: List[Team], col_width: i
                     team = f"{Fore.RED}{team}{Style.RESET_ALL}"
                 case TeamState.CHOSEN:
                     team = f"{Fore.BLACK}{Back.GREEN}{Style.BRIGHT}{team}{Style.RESET_ALL}"
+                case TeamState.SUPPORTING:
+                    team = f"{Fore.BLACK}{Back.YELLOW}{Style.BRIGHT}{team}{Style.RESET_ALL}"
         
         needed_padding = col_width - naked_team_length
         print(team + " "*needed_padding + task)
